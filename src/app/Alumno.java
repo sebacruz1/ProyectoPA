@@ -3,7 +3,9 @@ package app;
 public class Alumno {
 
     private int curso;
-    private Paralelo paralelo;
+
+    public enum paralelo {A, B, C}
+
     private String rut;
     private String nombre;
     private String apellidoPaterno;
@@ -60,13 +62,6 @@ public class Alumno {
         this.apellidoMaterno = apellidoMaterno;
     }
 
-    public Paralelo getParalelo() {
-        return paralelo;
-    }
-
-    public void setParalelo(Paralelo paralelo) {
-        this.paralelo = paralelo;
-    }
     public int getCurso() {
     return curso;
     }
