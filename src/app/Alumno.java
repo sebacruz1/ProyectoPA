@@ -2,12 +2,12 @@ package app;
 
 public class Alumno {
 
+    private int curso;
+    private Paralelo paralelo;
     private String rut;
     private String nombre;
     private String apellidoPaterno;
     private String apellidoMaterno;
-    private int curso;
-    private Paralelo paralelo;
     private boolean presente;
 
 

@@ -8,8 +8,10 @@ public class LeerCSV  {
         sc.useDelimiter(",");
         while (sc.hasNext()) {
             value = sc.next();
+
             System.out.print(value + " ");
         }
+
         sc.close();
 
     }
