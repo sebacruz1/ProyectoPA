@@ -1,9 +1,10 @@
+package asistenciacolegio;
+
 import java.util.LinkedList;
 import asistenciacolegio.Alumno;
 import asistenciacolegio.Profesor;
 
-package asistenciacolegio;
-
+ 
 
 public class Clases {
     private Clase clase;

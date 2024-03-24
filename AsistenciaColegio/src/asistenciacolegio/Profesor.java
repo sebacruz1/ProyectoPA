@@ -1,3 +1,5 @@
+package asistenciacolegio;
+
 public class Profesor {
     private String rut;
     private String nombre;
