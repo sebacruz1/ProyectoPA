@@ -1,2 +1,0 @@
-# ProyectoPA
-Proyecto programación avanzada.  
