@@ -1,52 +1,39 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+import java.util.LinkedList;
+import asistenciacolegio.Alumno;
+import asistenciacolegio.Profesor;
 
-package asistenciacolegio;
+public class Clases {
+    private Clase clase;
+    private LinkedList<Alumno> alumnos;
+    private Profesor profesor;
 
-/**
- *
- * @author seba
- */
+    public Clases(Clase clase, LinkedList<Alumno> alumnos, Profesor profesor) {
+        this.clase = clase;
+        this.alumnos = alumnos;
+        this.profesor = profesor;
+    }
 
-public class Alumno {
-    
-    private String rut; 
-    private String nombre;
-    private String apellido;
-    
-    public Alumno(String rut, String nombre, String apellido) {
-        this.rut = rut;
-        this.nombre = nombre;
-        this.apellido = apellido;
+    public Clase getClase() {
+        return clase;
     }
-    
-    public String getRut() {
-        return rut;
+
+    public void setClase(Clase clase) {
+        this.clase = clase;
     }
-    
-    public void setRut(String rut) {
-        this.rut = rut;
+
+    public LinkedList<Alumno> getAlumnos() {
+        return alumnos;
     }
-    
-    public String getNombre() {
-        return nombre;
+
+    public void setAlumnos(LinkedList<Alumno> alumnos) {
+        this.alumnos = alumnos;
     }
-    
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+
+    public Profesor getProfesor() {
+        return profesor;
     }
-    
-    public String getApellido() {
-        return apellido;
-    }
-    
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
+
+    public void setProfesor(Profesor profesor) {
+        this.profesor = profesor;
     }
 }
-
-
-
-
