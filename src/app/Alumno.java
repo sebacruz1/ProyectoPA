@@ -6,16 +6,26 @@ public class Alumno {
     private String nombre;
     private String apellidoPaterno;
     private String apellidoMaterno;
+    private int curso;
     private Paralelo paralelo;
+    private boolean presente;
+
+
+
+    public void setCurso(int curso) {
+        this.curso = curso;
+    }
 
     public enum Paralelo {
         A, B, C
     }
 
-    public Alumno(String rut, String nombre, String apellido) {
+    public Alumno(String rut, String nombre, String apellido, int curso, boolean presente) {
         this.rut = rut;
         this.nombre = nombre;
         this.apellidoPaterno = apellido;
+        this.curso = curso;
+        this.presente = presente;
     }
 
     public String getRut() {
@@ -56,5 +66,8 @@ public class Alumno {
 
     public void setParalelo(Paralelo paralelo) {
         this.paralelo = paralelo;
+    }
+    public int getCurso() {
+    return curso;
     }
 }
