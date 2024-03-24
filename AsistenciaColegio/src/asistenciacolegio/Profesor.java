@@ -1,21 +1,14 @@
-package asistenciacolegio;
-
-public class Alumno {
-
+public class Profesor {
     private String rut;
     private String nombre;
     private String apellidoPaterno;
     private String apellidoMaterno;
-    private Paralelo paralelo;
 
-    public enum Paralelo {
-        A, B, C
-    }
-
-    public Alumno(String rut, String nombre, String apellido) {
+    public Profesor(String rut, String nombre, String apellidoPaterno, String apellidoMaterno) {
         this.rut = rut;
         this.nombre = nombre;
-        this.apellidoPaterno = apellido;
+        this.apellidoPaterno = apellidoPaterno;
+        this.apellidoMaterno = apellidoMaterno;
     }
 
     public String getRut() {
@@ -48,13 +41,5 @@ public class Alumno {
 
     public void setApellidoMaterno(String apellidoMaterno) {
         this.apellidoMaterno = apellidoMaterno;
-    }
-
-    public Paralelo getParalelo() {
-        return paralelo;
-    }
-
-    public void setParalelo(Paralelo paralelo) {
-        this.paralelo = paralelo;
     }
 }
