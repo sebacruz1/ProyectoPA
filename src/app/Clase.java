@@ -1,5 +1,4 @@
 package app;
-
 public class Clase {
     private String nombre;
     private String[] curso;

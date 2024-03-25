@@ -3,9 +3,7 @@ package app;
 public class Alumno {
 
     private int curso;
-
-    public enum paralelo {A, B, C}
-
+    private char paralelo;
     private String rut;
     private String nombre;
     private String apellidoPaterno;
@@ -14,20 +12,29 @@ public class Alumno {
 
 
 
+    public Alumno(int curso, char paralelo, String rut, String nombre, String apellido, boolean presente) {
+        this.curso = curso;
+        this.paralelo = paralelo;
+        this.rut = rut;
+        this.nombre = nombre;
+        this.apellidoPaterno = apellido;
+        this.presente = presente;
+    }
+
+    public int getCurso() {
+        return curso;
+    }
+
     public void setCurso(int curso) {
         this.curso = curso;
     }
 
-    public enum Paralelo {
-        A, B, C
+    public char getParalelo() {
+        return paralelo;
     }
 
-    public Alumno(String rut, String nombre, String apellido, int curso, boolean presente) {
-        this.rut = rut;
-        this.nombre = nombre;
-        this.apellidoPaterno = apellido;
-        this.curso = curso;
-        this.presente = presente;
+    public void setParalelo(char paralelo) {
+        this.paralelo = paralelo;
     }
 
     public String getRut() {
@@ -62,7 +69,13 @@ public class Alumno {
         this.apellidoMaterno = apellidoMaterno;
     }
 
-    public int getCurso() {
-    return curso;
+    public boolean isPresente() {
+        return presente;
     }
+
+    public void setPresente(boolean presente) {
+        this.presente = presente;
+    }
+
+
 }
