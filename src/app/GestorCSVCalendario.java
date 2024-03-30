@@ -1,10 +1,12 @@
 package app;
 
+import java.io.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import app.Alumno;
 
 public class GestorCSVCalendario {
 
@@ -67,6 +69,17 @@ public class GestorCSVCalendario {
                 return null;
         }
     }
-
+    public void agregarAlumnoACSV(String nombreCurso, Alumno alumno) throws IOException {
+        String rutaArchivo = obtenerRutaArchivoCSV(nombreCurso);
+        if (rutaArchivo == null) {
+            System.out.println("Curso no encontrado.");
+            return;
+        }
+    
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(rutaArchivo, true))) {
+            String nuevaLinea = alumno.getRut() + ";" + alumno.getNombre() + ";" + alumno.getApellido();
+            bw.write(nuevaLinea + "\n");
+        }
+    }
 
 }
