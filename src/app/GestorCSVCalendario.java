@@ -81,5 +81,34 @@ public class GestorCSVCalendario {
             bw.write(nuevaLinea + "\n");
         }
     }
-
+    public void eliminarAlumnoDeCSV(String nombreCurso, String rutAlumno) throws IOException {
+        String rutaArchivo = obtenerRutaArchivoCSV(nombreCurso);
+        if (rutaArchivo == null) {
+            System.out.println("Curso no encontrado.");
+            return;
+        }
+    
+        File archivoOriginal = new File(rutaArchivo);
+        File archivoTemporal = new File(archivoOriginal.getAbsolutePath() + ".tmp");
+    
+        try (BufferedReader br = new BufferedReader(new FileReader(archivoOriginal));
+             BufferedWriter bw = new BufferedWriter(new FileWriter(archivoTemporal))) {
+    
+            String linea;
+    
+            while ((linea = br.readLine()) != null) {
+                if (!linea.split(";")[0].trim().equals(rutAlumno)) {
+                    bw.write(linea + "\n");
+                }
+            }
+        }
+    
+        if (!archivoOriginal.delete()) {
+            System.out.println("No se pudo eliminar el archivo original.");
+            return;
+        }
+        if (!archivoTemporal.renameTo(archivoOriginal)) {
+            System.out.println("No se pudo renombrar el archivo temporal.");
+        }
+    }
 }
