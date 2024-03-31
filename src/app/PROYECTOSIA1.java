@@ -120,7 +120,8 @@ public class PROYECTOSIA1 {
                     // Implementar lógica para ver asistencia histórica
                     break;
                 case 4:
-                    // Implementar lógica para agregar alumno
+                    gestorCSV.agregarAlumnoACSV(nombreCurso, rutaArchivo);
+                      
                     break;
                 case 5:
                     // Implementar lógica para eliminar alumno

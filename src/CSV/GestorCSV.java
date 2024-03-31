@@ -67,8 +67,21 @@ public class GestorCSV {
         }
     }
 
-    public void agregarAlumnoACSV(String nombreCurso, Alumno alumno) throws IOException {
-        String rutaArchivo = obtenerRutaArchivoCSV(nombreCurso);
+    public void agregarAlumnoACSV(String nombreCurso, String rutaArchivo) throws IOException {
+        BufferedReader lector = new BufferedReader(new InputStreamReader(System.in));
+
+        System.out.print("Ingresa el RUT del alumno: ");
+        String rut = lector.readLine();
+
+        System.out.print("Ingresa el nombre del alumno: ");
+        String nombre = lector.readLine();
+
+        System.out.print("Ingresa el apellido del alumno: ");
+        String apellido = lector.readLine();
+
+        // Suponiendo que tienes una clase Alumno que acepta rut, nombre y apellido en su constructor
+        Alumno alumno = new Alumno(rut, nombre, apellido);
+
         if (rutaArchivo == null) {
             System.out.println("Curso no encontrado.");
             return;
@@ -76,9 +89,11 @@ public class GestorCSV {
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(rutaArchivo, true))) {
             String nuevaLinea = alumno.getRut() + ";" + alumno.getNombre() + ";" + alumno.getApellido();
-            bw.write(nuevaLinea + "\n");
+            bw.write(nuevaLinea + System.lineSeparator());
+            System.out.println("Alumno agregado exitosamente.");
         }
     }
+
 
     public void eliminarAlumnoDeCSV(String nombreCurso, String rutAlumno) throws IOException {
         String rutaArchivo = obtenerRutaArchivoCSV(nombreCurso);
