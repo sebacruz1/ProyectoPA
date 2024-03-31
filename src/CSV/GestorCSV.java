@@ -10,15 +10,14 @@ import app.Alumno;
 
 public class GestorCSV {
 
-    
     public List<String> cargarFechasDesdeCSV(String rutaArchivo) {
         List<String> fechas = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
             String linea;
             while ((linea = br.readLine()) != null) {
-                
-                fechas.add(linea.replace(";", " ").trim()); 
+
+                fechas.add(linea.replace(";", " ").trim());
             }
         } catch (IOException e) {
             System.out.println("Error al leer el archivo CSV: " + e.getMessage());
@@ -26,20 +25,18 @@ public class GestorCSV {
         return fechas;
     }
 
-    
     public List<Alumno> cargarAlumnosDesdeCSV(String rutaArchivo) {
         List<Alumno> alumnos = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
             String linea;
-            
-            
-            br.readLine(); 
+
+            br.readLine();
 
             while ((linea = br.readLine()) != null) {
                 String[] partes = linea.split(";");
                 if (partes.length >= 3) {
-                   
+
                     String rut = partes[0].trim();
                     String nombre = partes[1].trim();
                     String apellido = partes[2].trim();
@@ -53,9 +50,9 @@ public class GestorCSV {
 
         return alumnos;
     }
-    
+
     public String obtenerRutaArchivoCSV(String nombreCurso) {
-        
+
         switch (nombreCurso) {
             case "Primero Básico":
                 return "src/CSV/files/primeroBasico.csv";
@@ -69,40 +66,41 @@ public class GestorCSV {
                 return null;
         }
     }
+
     public void agregarAlumnoACSV(String nombreCurso, Alumno alumno) throws IOException {
         String rutaArchivo = obtenerRutaArchivoCSV(nombreCurso);
         if (rutaArchivo == null) {
             System.out.println("Curso no encontrado.");
             return;
         }
-    
+
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(rutaArchivo, true))) {
             String nuevaLinea = alumno.getRut() + ";" + alumno.getNombre() + ";" + alumno.getApellido();
             bw.write(nuevaLinea + "\n");
         }
     }
+
     public void eliminarAlumnoDeCSV(String nombreCurso, String rutAlumno) throws IOException {
         String rutaArchivo = obtenerRutaArchivoCSV(nombreCurso);
         if (rutaArchivo == null) {
             System.out.println("Curso no encontrado.");
             return;
         }
-    
+
         File archivoOriginal = new File(rutaArchivo);
         File archivoTemporal = new File(archivoOriginal.getAbsolutePath() + ".tmp");
-    
-        try (BufferedReader br = new BufferedReader(new FileReader(archivoOriginal));
-             BufferedWriter bw = new BufferedWriter(new FileWriter(archivoTemporal))) {
-    
+
+        try (BufferedReader br = new BufferedReader(new FileReader(archivoOriginal)); BufferedWriter bw = new BufferedWriter(new FileWriter(archivoTemporal))) {
+
             String linea;
-    
+
             while ((linea = br.readLine()) != null) {
                 if (!linea.split(";")[0].trim().equals(rutAlumno)) {
                     bw.write(linea + "\n");
                 }
             }
         }
-    
+
         if (!archivoOriginal.delete()) {
             System.out.println("No se pudo eliminar el archivo original.");
             return;
