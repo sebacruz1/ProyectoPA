@@ -1,4 +1,4 @@
-package app;
+package CSV;
 
 import java.io.*;
 import java.io.BufferedReader;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import app.Alumno;
 
-public class GestorCSVCalendario {
+public class GestorCSV {
 
     
     public List<String> cargarFechasDesdeCSV(String rutaArchivo) {
@@ -58,13 +58,13 @@ public class GestorCSVCalendario {
         
         switch (nombreCurso) {
             case "Primero Básico":
-                return "C:\\Users\\joaki\\Desktop\\ProyectoPA-main\\src\\CSV\\files\\primerobasico.csv";
+                return "src/CSV/files/primeroBasico.csv";
             case "Segundo Básico":
-                return "C:\\Users\\joaki\\Desktop\\ProyectoPA-main\\src\\CSV\\files\\segundobasico.csv";
+                return "src/CSV/files/segundoBasico.csv";
             case "Tercero Básico":
-                return "C:\\Users\\joaki\\Desktop\\ProyectoPA-main\\src\\CSV\\files\\tercerobasico.csv";
+                return "src/CSV/files/tercerobasico.csv";
             case "Cuarto Básico":
-                return "C:\\Users\\joaki\\Desktop\\ProyectoPA-main\\src\\CSV\\files\\cuartobasico.csv";
+                return "src/CSV/files/cuartobasico.csv";
             default:
                 return null;
         }
