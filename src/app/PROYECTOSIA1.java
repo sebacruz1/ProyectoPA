@@ -124,7 +124,8 @@ public class PROYECTOSIA1 {
                       
                     break;
                 case 5:
-                    // Implementar lógica para eliminar alumno
+                    gestorCSV.eliminarAlumnoDeCSV(nombreCurso, rutaArchivo);
+                  
                     break;
                 case 0:
                     return; // Regresar al menú principal

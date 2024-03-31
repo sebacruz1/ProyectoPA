@@ -95,33 +95,47 @@ public class GestorCSV {
     }
 
 
-    public void eliminarAlumnoDeCSV(String nombreCurso, String rutAlumno) throws IOException {
-        String rutaArchivo = obtenerRutaArchivoCSV(nombreCurso);
+    public void eliminarAlumnoDeCSV(String nombreCurso, String rutaArchivo) throws IOException {
+        
         if (rutaArchivo == null) {
             System.out.println("Curso no encontrado.");
             return;
         }
 
-        File archivoOriginal = new File(rutaArchivo);
-        File archivoTemporal = new File(archivoOriginal.getAbsolutePath() + ".tmp");
+        File archivoCSV = new File(rutaArchivo);
+        List<String> lineas = new ArrayList<>();
+        boolean alumnoEncontrado = false;
+        String rutAlumno;
+        BufferedReader lector = new BufferedReader(new InputStreamReader(System.in));
 
-        try (BufferedReader br = new BufferedReader(new FileReader(archivoOriginal)); BufferedWriter bw = new BufferedWriter(new FileWriter(archivoTemporal))) {
+        
 
+        // Leer el contenido del archivo y almacenar las líneas, excepto la del alumno a eliminar
+        try (BufferedReader br = new BufferedReader(new FileReader(archivoCSV))) {
             String linea;
-
+            System.out.println("Ingrese el rut del alumno a eliminar (Formato 12345678-9: ");
+            rutAlumno = lector.readLine();
             while ((linea = br.readLine()) != null) {
+                // Suponiendo que el RUT es el primer elemento en cada línea
                 if (!linea.split(";")[0].trim().equals(rutAlumno)) {
-                    bw.write(linea + "\n");
+                    lineas.add(linea);
+                } else {
+                    alumnoEncontrado = true;
                 }
             }
         }
 
-        if (!archivoOriginal.delete()) {
-            System.out.println("No se pudo eliminar el archivo original.");
-            return;
-        }
-        if (!archivoTemporal.renameTo(archivoOriginal)) {
-            System.out.println("No se pudo renombrar el archivo temporal.");
+        // Reescribir el archivo sin la línea del alumno eliminado
+        if (alumnoEncontrado) {
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivoCSV, false))) { // false para sobrescribir el archivo
+                for (String linea : lineas) {
+                    bw.write(linea);
+                    bw.newLine();
+                }
+            }
+            System.out.println("Alumno con RUT " + rutAlumno + " eliminado exitosamente.");
+        } else {
+            System.out.println("Alumno con RUT " + rutAlumno + " no encontrado.");
         }
     }
 }
