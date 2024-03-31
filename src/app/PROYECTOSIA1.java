@@ -9,7 +9,6 @@ import java.util.List;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-
 public class PROYECTOSIA1 {
 
     public static void main(String[] args) throws IOException {
@@ -19,7 +18,7 @@ public class PROYECTOSIA1 {
         int indiceFechaActual = 0;
         LocalDate fechaActual = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.forLanguageTag("es")); // Ajusta este formato según el usado en tu CSV
-        
+
         BufferedReader lector = new BufferedReader(new InputStreamReader(System.in));
         String input;  // Cambiado a String para manejar entradas vacías
 
