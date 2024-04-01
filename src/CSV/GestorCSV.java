@@ -163,4 +163,59 @@ public class GestorCSV {
             System.out.println("Alumno con identificador '" + identificador + "' no encontrado.");
         }
     }
+    
+    public String obtenerRutaArchivoAsistencia(String nombreCurso) {
+
+        switch (nombreCurso) {
+            case "Primero Básico":
+                return "src/CSV/files/asistencias/asistenciaPrimero.csv";
+            case "Segundo Básico":
+                return "src/CSV/files/asistencias/asistenciaSegundo.csv";
+            case "Tercero Básico":
+                return "src/CSV/files/asistencias/asistenciaTercero.csv";
+            case "Cuarto Básico":
+                return "src/CSV/files/asistencias/asistenciaCuarto.csv";
+            default:
+                return null;
+        }
+    }
+    
+    public void agregarAsistencia(String rutaArchivo, int presentes, int indiceFechaActual) {
+        if (rutaArchivo == null) {
+            System.err.println("La ruta del archivo no puede ser null.");
+            return;
+        }
+
+        List<String> lineas = new ArrayList<>();
+        int lineaActual = 0; // Para llevar la cuenta de la línea actual mientras leemos el archivo
+
+        // Leer el contenido actual del archivo
+        try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                if (lineaActual == indiceFechaActual) {
+                    // Obtenemos la fecha de la línea actual para mantenerla
+                    String fecha = linea.split(",")[0];
+                    // Reconstruimos la línea con la fecha y los presentes actualizados
+                    linea = fecha + "," + presentes;
+                }
+                lineas.add(linea);
+                lineaActual++;
+            }
+        } catch (IOException e) {
+            System.err.println("Error al leer el archivo: " + e.getMessage());
+            return;
+        }
+
+        // Reescribir el archivo con el contenido actualizado
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(rutaArchivo))) {
+            for (String linea : lineas) {
+                bw.write(linea);
+                bw.newLine();
+            }
+        } catch (IOException e) {
+            System.err.println("Error al escribir en el archivo: " + e.getMessage());
+        }
+    }
+
 }

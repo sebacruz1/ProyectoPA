@@ -67,16 +67,16 @@ public class PROYECTOSIA1 {
 
             switch (opcion) {
                 case 1:
-                    menuCurso("Primero Básico");
+                    menuCurso("Primero Básico", indiceFechaActual);
                     break;
                 case 2:
-                    menuCurso("Segundo Básico");
+                    menuCurso("Segundo Básico", indiceFechaActual);
                     break;
                 case 3:
-                    menuCurso("Tercero Básico");
+                    menuCurso("Tercero Básico", indiceFechaActual);
                     break;
                 case 4:
-                    menuCurso("Cuarto Básico");
+                    menuCurso("Cuarto Básico", indiceFechaActual);
                     break;
                 case 8:
                      if (indiceFechaActual - 1 < fechasCalendario.size()) {
@@ -104,7 +104,7 @@ public class PROYECTOSIA1 {
         }
     }
 
-    public static void menuCurso(String nombreCurso) throws IOException {
+    public static void menuCurso(String nombreCurso, int indiceFechaActual) throws IOException {
         BufferedReader lector = new BufferedReader(new InputStreamReader(System.in));
         String input;
         int opcion;
@@ -130,6 +130,10 @@ public class PROYECTOSIA1 {
 
             switch (opcion) {
                 case 1:
+                    System.out.println("Ingrese la cantidad de alumnos presentes: ");
+                    int presentes = Integer.parseInt(lector.readLine());
+                    String rutaArchivoAsistencia = gestorCSV.obtenerRutaArchivoAsistencia(nombreCurso);
+                    gestorCSV.agregarAsistencia(rutaArchivoAsistencia, presentes, indiceFechaActual);
                     // Implementar lógica específica para marcar asistencia en este curso
                     break;
                 case 2:
@@ -154,7 +158,8 @@ public class PROYECTOSIA1 {
                     break;
 
                 case 3:
-                    // Implementar lógica para ver asistencia histórica
+                    
+                    
                     break;
                 case 4:
                     gestorCSV.agregarAlumnoACSV(nombreCurso, rutaArchivo);
