@@ -161,7 +161,20 @@ public class PROYECTOSIA1 {
                       
                     break;
                 case 5:
-                    gestorCSV.eliminarAlumnoDeCSV(nombreCurso, rutaArchivo);
+                    System.out.println("¿Deseas eliminar por RUT o por nombre y apellido? (R/N)");
+                    String eleccion = lector.readLine();
+
+                    if ("R".equalsIgnoreCase(eleccion)) {
+                        System.out.println("Ingresa el RUT del alumno a eliminar:");
+                        String rut = lector.readLine();
+                        gestorCSV.eliminarAlumnoDeCSV(rutaArchivo, rut);
+                    } else if ("N".equalsIgnoreCase(eleccion)) {
+                        System.out.println("Ingresa el nombre y apellido del alumno a eliminar:");
+                        String nombreApellido = lector.readLine();
+                        gestorCSV.eliminarAlumnoDeCSV(rutaArchivo, nombreApellido);
+                    } else {
+                        System.out.println("Opción no válida.");
+                    }
                   
                     break;
                 case 0:
