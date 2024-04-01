@@ -1,6 +1,5 @@
----
 # Proyecto Programación Avanzada Primer Semestre 2024
-
+---
 ## Alumnos
  - Sebastián Cruz
  - Joaquín Fuenzalida
@@ -44,6 +43,7 @@ Para ejecutar este proyecto, necesitas tener instalado Java 17 en tu sistema. Si
 ## Estructura de Archivos.
 
 - `PROYECTOSIA1.java`: Archivo principal que contiene la lógica de navegación del menú y la interacción con el usuario.
+- `GestorAlumnos.java`: Archivo encargado de hacer los cambios dentro de los cursos.
 - `GestorCSV.java`: Encargado de manejar la lectura y escritura de archivos CSV, utilizados para almacenar información sobre fechas, alumnos y asistencia.
 - `Alumno.java`: Define la estructura y propiedades de un alumno, como su nombre, apellido y RUT.
 - `Curso.java`: Gestiona la información relacionada con los cursos, incluidos los alumnos inscritos y el registro de asistencia.
