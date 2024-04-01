@@ -15,6 +15,7 @@ Este proyecto es un sistema de gestión escolar desarrollado en Java 17, diseña
 - Registro de asistencia diaria.
 - Navegación por un calendario escolar con fechas específicas.
 - Capacidad de agregar y eliminar alumnos de los cursos.
+- Ver promedio de asistencia por curso (**LO LEE DEL CSV EN VEZ DEL MAPA **)
 
 ## Cómo Ejecutar
 
