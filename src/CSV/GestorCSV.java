@@ -51,6 +51,40 @@ public class GestorCSV {
         return alumnos;
     }
 
+     public Alumno cargarAlumnoPorRUT(String rutaArchivo, String rutBuscado) {
+        
+            try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
+                String linea;
+                while ((linea = br.readLine()) != null) {
+                    String[] partes = linea.split(";");
+                    if (partes.length >= 3 && partes[0].trim().equals(rutBuscado)) {
+                        return new Alumno(partes[0].trim(), partes[1].trim(), partes[2].trim());
+                    }
+                }
+            } catch (IOException e) {
+                
+                System.out.println("Error al leer el archivo CSV: " + e.getMessage());
+            }
+        return null; 
+    }
+    
+    public List<Alumno> cargarAlumnosPorNombre(String rutaArchivo, String nombreBuscado) {
+        
+        List<Alumno> alumnosEncontrados = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                String[] partes = linea.split(";");
+                if (partes.length >= 3 && partes[1].trim().equalsIgnoreCase(nombreBuscado)) {
+                    alumnosEncontrados.add(new Alumno(partes[0].trim(), partes[1].trim(), partes[2].trim()));
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error al leer el archivo CSV: " + e.getMessage());
+        }
+        return alumnosEncontrados; 
+    }
+
     public String obtenerRutaArchivoCSV(String nombreCurso) {
 
         switch (nombreCurso) {
@@ -94,30 +128,22 @@ public class GestorCSV {
         }
     }
 
-
-    public void eliminarAlumnoDeCSV(String nombreCurso, String rutaArchivo) throws IOException {
-        
+    
+    public void eliminarAlumnoDeCSV(String rutaArchivo, String identificador) throws IOException {
         if (rutaArchivo == null) {
-            System.out.println("Curso no encontrado.");
+            System.out.println("Archivo no encontrado.");
             return;
         }
 
         File archivoCSV = new File(rutaArchivo);
         List<String> lineas = new ArrayList<>();
         boolean alumnoEncontrado = false;
-        String rutAlumno;
-        BufferedReader lector = new BufferedReader(new InputStreamReader(System.in));
 
-        
-
-        // Leer el contenido del archivo y almacenar las líneas, excepto la del alumno a eliminar
         try (BufferedReader br = new BufferedReader(new FileReader(archivoCSV))) {
             String linea;
-            System.out.println("Ingrese el rut del alumno a eliminar (Formato 12345678-9: ");
-            rutAlumno = lector.readLine();
             while ((linea = br.readLine()) != null) {
-                // Suponiendo que el RUT es el primer elemento en cada línea
-                if (!linea.split(";")[0].trim().equals(rutAlumno)) {
+                // Decide si buscar por RUT o por nombre y apellido
+                if (!linea.contains(identificador)) {
                     lineas.add(linea);
                 } else {
                     alumnoEncontrado = true;
@@ -125,17 +151,16 @@ public class GestorCSV {
             }
         }
 
-        // Reescribir el archivo sin la línea del alumno eliminado
         if (alumnoEncontrado) {
-            try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivoCSV, false))) { // false para sobrescribir el archivo
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivoCSV, false))) {
                 for (String linea : lineas) {
                     bw.write(linea);
                     bw.newLine();
                 }
             }
-            System.out.println("Alumno con RUT " + rutAlumno + " eliminado exitosamente.");
+            System.out.println("Alumno con identificador '" + identificador + "' eliminado exitosamente.");
         } else {
-            System.out.println("Alumno con RUT " + rutAlumno + " no encontrado.");
+            System.out.println("Alumno con identificador '" + identificador + "' no encontrado.");
         }
     }
 }
