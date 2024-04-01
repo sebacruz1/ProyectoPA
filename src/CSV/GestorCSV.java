@@ -6,7 +6,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import app.Alumno;
+import app.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 public class GestorCSV {
 
@@ -51,47 +56,30 @@ public class GestorCSV {
         return alumnos;
     }
 
-     public Alumno cargarAlumnoPorRUT(String rutaArchivo, String rutBuscado) {
-        
-            try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
-                String linea;
-                while ((linea = br.readLine()) != null) {
-                    String[] partes = linea.split(";");
-                    if (partes.length >= 3 && partes[0].trim().equals(rutBuscado)) {
-                        return new Alumno(partes[0].trim(), partes[1].trim(), partes[2].trim());
-                    }
-                }
-            } catch (IOException e) {
-                
-                System.out.println("Error al leer el archivo CSV: " + e.getMessage());
-            }
-        return null; 
-    }
-    
-    public List<Alumno> cargarAlumnosPorNombre(String rutaArchivo, String nombreBuscado) {
-        
-        List<Alumno> alumnosEncontrados = new ArrayList<>();
+    public Alumno cargarAlumnoPorRUT(String rutaArchivo, String rutBuscado) {
+
         try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
             String linea;
             while ((linea = br.readLine()) != null) {
                 String[] partes = linea.split(";");
-                if (partes.length >= 3 && partes[1].trim().equalsIgnoreCase(nombreBuscado)) {
-                    alumnosEncontrados.add(new Alumno(partes[0].trim(), partes[1].trim(), partes[2].trim()));
+                if (partes.length >= 3 && partes[0].trim().equals(rutBuscado)) {
+                    return new Alumno(partes[0].trim(), partes[1].trim(), partes[2].trim());
                 }
             }
         } catch (IOException e) {
+
             System.out.println("Error al leer el archivo CSV: " + e.getMessage());
         }
-        return alumnosEncontrados; 
+        return null;
     }
 
     public String obtenerRutaArchivoCSV(String nombreCurso) {
 
         switch (nombreCurso) {
             case "Primero Básico":
-                return "src/CSV/files/primeroBasico.csv";
+                return "src/CSV/files/primerobasico.csv";
             case "Segundo Básico":
-                return "src/CSV/files/segundoBasico.csv";
+                return "src/CSV/files/segundobasico.csv";
             case "Tercero Básico":
                 return "src/CSV/files/tercerobasico.csv";
             case "Cuarto Básico":
@@ -101,69 +89,6 @@ public class GestorCSV {
         }
     }
 
-    public void agregarAlumnoACSV(String nombreCurso, String rutaArchivo) throws IOException {
-        BufferedReader lector = new BufferedReader(new InputStreamReader(System.in));
-
-        System.out.print("Ingresa el RUT del alumno: ");
-        String rut = lector.readLine();
-
-        System.out.print("Ingresa el nombre del alumno: ");
-        String nombre = lector.readLine();
-
-        System.out.print("Ingresa el apellido del alumno: ");
-        String apellido = lector.readLine();
-
-        // Suponiendo que tienes una clase Alumno que acepta rut, nombre y apellido en su constructor
-        Alumno alumno = new Alumno(rut, nombre, apellido);
-
-        if (rutaArchivo == null) {
-            System.out.println("Curso no encontrado.");
-            return;
-        }
-
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(rutaArchivo, true))) {
-            String nuevaLinea = alumno.getRut() + ";" + alumno.getNombre() + ";" + alumno.getApellido();
-            bw.write(nuevaLinea + System.lineSeparator());
-            System.out.println("Alumno agregado exitosamente.");
-        }
-    }
-
-    
-    public void eliminarAlumnoDeCSV(String rutaArchivo, String identificador) throws IOException {
-        if (rutaArchivo == null) {
-            System.out.println("Archivo no encontrado.");
-            return;
-        }
-
-        File archivoCSV = new File(rutaArchivo);
-        List<String> lineas = new ArrayList<>();
-        boolean alumnoEncontrado = false;
-
-        try (BufferedReader br = new BufferedReader(new FileReader(archivoCSV))) {
-            String linea;
-            while ((linea = br.readLine()) != null) {
-                // Decide si buscar por RUT o por nombre y apellido
-                if (!linea.contains(identificador)) {
-                    lineas.add(linea);
-                } else {
-                    alumnoEncontrado = true;
-                }
-            }
-        }
-
-        if (alumnoEncontrado) {
-            try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivoCSV, false))) {
-                for (String linea : lineas) {
-                    bw.write(linea);
-                    bw.newLine();
-                }
-            }
-            System.out.println("Alumno con identificador '" + identificador + "' eliminado exitosamente.");
-        } else {
-            System.out.println("Alumno con identificador '" + identificador + "' no encontrado.");
-        }
-    }
-    
     public String obtenerRutaArchivoAsistencia(String nombreCurso) {
 
         switch (nombreCurso) {
@@ -179,7 +104,7 @@ public class GestorCSV {
                 return null;
         }
     }
-    
+
     public void agregarAsistencia(String rutaArchivo, int presentes, int indiceFechaActual) {
         if (rutaArchivo == null) {
             System.err.println("La ruta del archivo no puede ser null.");
@@ -218,4 +143,85 @@ public class GestorCSV {
         }
     }
 
+    public void actualizarCSV(Curso clase) {
+        String rutaArchivo = obtenerRutaArchivoCSV(clase.getNombre());
+
+        if (rutaArchivo == null) {
+            System.err.println("No se pudo encontrar la ruta del archivo para el curso: " + clase.getNombre());
+            return;
+        }
+
+        // Lista que contendrá las líneas a escribir en el archivo CSV
+        List<String> lineasNuevas = new ArrayList<>();
+
+        // Construir las líneas a partir de la lista de alumnos actual
+        for (Alumno alumno : clase.getAlumnos()) {
+            String linea = String.format("%s;%s;%s", alumno.getRut(), alumno.getNombre(), alumno.getApellido());
+            lineasNuevas.add(linea);
+        }
+
+        // Sobrescribir el archivo CSV con el contenido actualizado
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(rutaArchivo, false))) { // 'false' para sobrescribir
+            for (String linea : lineasNuevas) {
+                bw.write(linea);
+                bw.newLine(); // Añade una nueva línea después de cada entrada
+            }
+            System.out.println("Archivo CSV actualizado con éxito para el curso: " + clase.getNombre());
+        } catch (IOException e) {
+            System.err.println("Error al escribir en el archivo CSV: " + e.getMessage());
+        }
+    }
+
+    public void actualizarAsistenciasCSV(Curso curso) {
+        String rutaArchivoAsistencia = obtenerRutaArchivoAsistencia(curso.getNombre());
+
+        if (rutaArchivoAsistencia == null) {
+            System.err.println("No se pudo encontrar la ruta del archivo de asistencia para el curso: " + curso.getNombre());
+            return;
+        }
+
+        Map<String, String> asistenciasActualizadas = new HashMap<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy", Locale.forLanguageTag("es"));
+
+        // Preparar las asistencias actualizadas en un mapa
+        for (Map.Entry<LocalDate, RegistroAsistencia> entry : curso.getAsistenciasPorFecha().entrySet()) {
+            String fecha = entry.getKey().format(formatter);
+            String asistencia = String.valueOf(entry.getValue().getAlumnosPresentes());
+            asistenciasActualizadas.put(fecha, fecha + ";" + asistencia);
+        }
+
+        // Leer el contenido existente y actualizarlo
+        List<String> lineasActualizadas = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivoAsistencia))) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                String[] partes = linea.split(";");
+                if (partes.length > 0 && asistenciasActualizadas.containsKey(partes[0])) {
+                    // Actualizar la línea con los datos nuevos
+                    lineasActualizadas.add(asistenciasActualizadas.get(partes[0]));
+                    asistenciasActualizadas.remove(partes[0]); // Evitar duplicados al añadir nuevas líneas
+                } else {
+                    // Mantener la línea si no necesita actualización
+                    lineasActualizadas.add(linea);
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error al leer el archivo: " + e.getMessage());
+            return;
+        }
+
+        // Añadir líneas para las nuevas fechas de asistencia
+        lineasActualizadas.addAll(asistenciasActualizadas.values());
+
+        // Reescribir el archivo con las líneas actualizadas
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(rutaArchivoAsistencia, false))) { // 'false' para sobrescribir
+            for (String lineaActualizada : lineasActualizadas) {
+                bw.write(lineaActualizada);
+                bw.newLine();
+            }
+            System.out.println("Archivo CSV de asistencia actualizado con éxito para el curso: " + curso.getNombre());
+        } catch (IOException e) {
+            System.err.println("Error al escribir en el archivo CSV: " + e.getMessage());
+        }
+    }
 }

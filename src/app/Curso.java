@@ -1,19 +1,18 @@
 package app;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class Curso {
     private String nombre;
-    private ArrayList<Alumno> alumnos;
+    private List<Alumno> alumnos;
     private int totalAlumnos;
     private Map<LocalDate, RegistroAsistencia> asistenciasPorFecha;
     
 
        
-    public Curso(String nombre, String curso, ArrayList<Alumno> alumnos, 
-            int totalAlumnos, Map<LocalDate, RegistroAsistencia> asistenciaPorFecha) {
+    public Curso(String nombre, List<Alumno> alumnos, int totalAlumnos, Map<LocalDate, RegistroAsistencia> asistenciaPorFecha) {
         this.nombre = nombre;
         this.alumnos = alumnos;
         this.totalAlumnos = totalAlumnos;
@@ -29,11 +28,11 @@ public class Curso {
         return nombre;
     }
         
-    public ArrayList<Alumno> getAlumnos() {
+    public List<Alumno> getAlumnos() {
         return alumnos;
     }
 
-    public void setAlumnos(ArrayList<Alumno> alumnos) {
+    public void setAlumnos(List<Alumno> alumnos) {
         this.alumnos = alumnos;
     }
     
