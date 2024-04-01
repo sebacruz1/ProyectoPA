@@ -12,6 +12,7 @@ public class EsperaEnter {
         
         // Espera hasta que el usuario presione Enter
         scanner.nextLine();
+        
 
         // No es necesario cerrar el Scanner si está vinculado a System.in en un contexto simple
     }

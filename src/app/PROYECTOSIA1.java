@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.util.List;
 import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
 import java.util.Locale;
 
 public class PROYECTOSIA1 {
@@ -14,22 +15,48 @@ public class PROYECTOSIA1 {
     public static void main(String[] args) throws IOException {
 
         GestorCSV gestor = new GestorCSV();
-        List<String> fechasCalendario = gestor.cargarFechasDesdeCSV("src/CSV/files/CalendarioGeneral.csv");
-        int indiceFechaActual = 0;
+        List<String> fechasCalendario = gestor.cargarFechasDesdeCSV("src/CSV/files/fechas.csv");
         LocalDate fechaActual = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.forLanguageTag("es")); // Ajusta este formato según el usado en tu CSV
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy", Locale.forLanguageTag("es")); // Asegúrate de que este formato coincida con el de tu CSV
+
+        // Encuentra el índice de la fecha de hoy en la lista de fechas
+        int indiceFechaActual = -1;
+        for (int i = 0; i < fechasCalendario.size(); i++) {
+            if (LocalDate.parse(fechasCalendario.get(i), formatter).isEqual(fechaActual)) {
+                indiceFechaActual = i;
+                break;
+            }
+        }
+
+        // Verifica si se encontró la fecha de hoy en la lista
+        if (indiceFechaActual == -1) {
+            System.out.println("La fecha de hoy no se encuentra en el calendario.");
+            return; // Termina la ejecución si hoy no está en el calendario
+        }
+
 
         BufferedReader lector = new BufferedReader(new InputStreamReader(System.in));
         String input;  // Cambiado a String para manejar entradas vacías
-
+        String dia;
         while (true) {
-            System.out.println("Día: " + fechasCalendario.get(indiceFechaActual));
+              // Asegurarse de que el índice esté dentro de los límites de la lista
+            if (indiceFechaActual >= 0 && indiceFechaActual < fechasCalendario.size()) {
+                LocalDate fecha = LocalDate.parse(fechasCalendario.get(indiceFechaActual), formatter); // Parsear la fecha actual del calendario
+                dia = fecha.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.forLanguageTag("es")); // Obtener el día de la semana para esta fecha
+                System.out.println("Día: " + dia + " " + fechasCalendario.get(indiceFechaActual));
+            } else {
+                System.out.println("La fecha está fuera del rango del calendario.");
+                break; 
+                
+            }
+            
             System.out.println("\nElija un curso:");
             System.out.println("1. Primero Basico");
             System.out.println("2. Segundo Basico");
             System.out.println("3. Tercero Basico");
             System.out.println("4. Cuarto Basico");
-            System.out.println("9. Siguiente dia");
+            System.out.println("8. Dia anterior");
+            System.out.println("9. Dia siguiente");
             System.out.println("0. Salir");
 
             System.out.print("Ingrese una opción: ");
@@ -51,6 +78,15 @@ public class PROYECTOSIA1 {
                 case 4:
                     menuCurso("Cuarto Básico");
                     break;
+                case 8:
+                     if (indiceFechaActual - 1 < fechasCalendario.size()) {
+                        indiceFechaActual--;
+                    } else {
+                        System.out.println("No hay más fechas en el calendario.");
+                    }
+                    break;
+                    
+                    
                 case 9: // Siguiente día
                     if (indiceFechaActual + 1 < fechasCalendario.size()) {
                         indiceFechaActual++;
@@ -59,6 +95,7 @@ public class PROYECTOSIA1 {
                     }
                     break;
                 case 0: // Salir
+                    System.out.print("Saliendo..." );
                     return;
                 default:
                     System.out.println("Opción no válida.");
