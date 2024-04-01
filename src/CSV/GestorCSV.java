@@ -94,20 +94,17 @@ public class GestorCSV {
             return;
         }
 
-        // Lista que contendrá las líneas a escribir en el archivo CSV
         List<String> lineasNuevas = new ArrayList<>();
 
-        // Construir las líneas a partir de la lista de alumnos actual
         for (Alumno alumno : clase.getAlumnos()) {
             String linea = String.format("%s;%s;%s", alumno.getRut(), alumno.getNombre(), alumno.getApellido());
             lineasNuevas.add(linea);
         }
 
-        // Sobrescribir el archivo CSV con el contenido actualizado
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(rutaArchivo))) { // 'false' para sobrescribir
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(rutaArchivo))) {
             for (String linea : lineasNuevas) {
                 bw.write(linea);
-                bw.newLine(); // Añade una nueva línea después de cada entrada
+                bw.newLine();
             }
             System.out.println("Archivo CSV actualizado con éxito para el curso: " + clase.getNombre());
         } catch (IOException e) {
@@ -126,25 +123,23 @@ public class GestorCSV {
         Map<String, String> asistenciasActualizadas = new HashMap<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy", Locale.forLanguageTag("es"));
 
-        // Preparar las asistencias actualizadas en un mapa
         for (Map.Entry<LocalDate, RegistroAsistencia> entry : curso.getAsistenciasPorFecha().entrySet()) {
             String fecha = entry.getKey().format(formatter);
             String asistencia = String.valueOf(entry.getValue().getAlumnosPresentes());
             asistenciasActualizadas.put(fecha, fecha + ";" + asistencia);
         }
 
-        // Leer el contenido existente y actualizarlo
         List<String> lineasActualizadas = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivoAsistencia))) {
             String linea;
             while ((linea = br.readLine()) != null) {
                 String[] partes = linea.split(";");
                 if (partes.length > 0 && asistenciasActualizadas.containsKey(partes[0])) {
-                    // Actualizar la línea con los datos nuevos
+
                     lineasActualizadas.add(asistenciasActualizadas.get(partes[0]));
-                    asistenciasActualizadas.remove(partes[0]); // Evitar duplicados al añadir nuevas líneas
+                    asistenciasActualizadas.remove(partes[0]);
                 } else {
-                    // Mantener la línea si no necesita actualización
+
                     lineasActualizadas.add(linea);
                 }
             }
@@ -153,11 +148,9 @@ public class GestorCSV {
             return;
         }
 
-        // Añadir líneas para las nuevas fechas de asistencia
         lineasActualizadas.addAll(asistenciasActualizadas.values());
 
-        // Reescribir el archivo con las líneas actualizadas
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(rutaArchivoAsistencia, false))) { // 'false' para sobrescribir
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(rutaArchivoAsistencia, false))) {
             for (String lineaActualizada : lineasActualizadas) {
                 bw.write(lineaActualizada);
                 bw.newLine();
@@ -177,12 +170,12 @@ public class GestorCSV {
             int contador = 0;
 
             while ((linea = br.readLine()) != null) {
-                String[] valores = linea.split(";"); // Asumiendo que tu CSV usa comas como delimitador
+                String[] valores = linea.split(";");
                 if (valores.length > 1) {
                     try {
-                        int valor = Integer.parseInt(valores[1].trim()); // Extrae y convierte el valor de la segunda columna
-                        suma += valor; // Suma el valor a la suma total
-                        contador++; // Incrementa el contador de valores
+                        int valor = Integer.parseInt(valores[1].trim());
+                        suma += valor;
+                        contador++;
                     } catch (NumberFormatException e) {
                         System.err.println("No se pudo convertir el valor a entero: " + valores[1]);
                     }
@@ -190,7 +183,7 @@ public class GestorCSV {
             }
 
             if (contador > 0) {
-                double promedio = (double) suma / contador; // Calcula el promedio
+                double promedio = (double) suma / contador;
                 System.out.println("El promedio de asistencia de alumnos es: " + promedio);
             } else {
                 System.out.println("No se encontraron valores para calcular el promedio.");
@@ -199,7 +192,6 @@ public class GestorCSV {
         } catch (IOException e) {
             System.err.println("Ocurrió un error al leer el archivo: " + e.getMessage());
         }
-   
-      
+
     }
 }

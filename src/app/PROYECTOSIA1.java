@@ -30,20 +30,19 @@ public class PROYECTOSIA1 {
             }
         }
 
-        // Verifica si se encontró la fecha de hoy en la lista
         if (indiceFechaActual == -1) {
             System.out.println("La fecha de hoy no se encuentra en el calendario.");
-            return; // Termina la ejecución si hoy no está en el calendario
+            return;
         }
 
         BufferedReader lector = new BufferedReader(new InputStreamReader(System.in));
-        String input;  // Cambiado a String para manejar entradas vacías
+        String input;
         String dia;
         while (true) {
-            // Asegurarse de que el índice esté dentro de los límites de la lista
+
             if (indiceFechaActual >= 0 && indiceFechaActual < fechasCalendario.size()) {
-                LocalDate fecha = LocalDate.parse(fechasCalendario.get(indiceFechaActual), formatter); // Parsear la fecha actual del calendario
-                dia = fecha.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.forLanguageTag("es")); // Obtener el día de la semana para esta fecha
+                LocalDate fecha = LocalDate.parse(fechasCalendario.get(indiceFechaActual), formatter);
+                dia = fecha.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.forLanguageTag("es"));
                 System.out.println("Día: " + dia + " " + fechasCalendario.get(indiceFechaActual));
             } else {
                 System.out.println("La fecha está fuera del rango del calendario.");
@@ -61,9 +60,8 @@ public class PROYECTOSIA1 {
             System.out.println("0. Salir");
 
             System.out.print("Ingrese una opción: ");
-            input = lector.readLine();  // Leer la entrada como una cadena
+            input = lector.readLine();
 
-            // Convertir la entrada en un entero si no está vacía
             int opcion = input.isEmpty() ? -1 : Integer.parseInt(input);
 
             switch (opcion) {
@@ -87,14 +85,14 @@ public class PROYECTOSIA1 {
                     }
                     break;
 
-                case 9: // Siguiente día
+                case 9:
                     if (indiceFechaActual + 1 < fechasCalendario.size()) {
                         indiceFechaActual++;
                     } else {
                         System.out.println("No hay más fechas en el calendario.");
                     }
                     break;
-                case 0: // Salir
+                case 0:
                     System.out.print("Saliendo...");
                     return;
                 default:
@@ -117,7 +115,6 @@ public class PROYECTOSIA1 {
         Map<LocalDate, RegistroAsistencia> asistenciasPorFecha = new HashMap<>();
 
         List<Alumno> alumnosCurso = gestorCSV.cargarAlumnosDesdeCSV(rutaArchivo);
-        
 
         Curso clase = new Curso(nombreCurso, alumnosCurso, alumnosCurso.size(), asistenciasPorFecha);
 
@@ -131,9 +128,8 @@ public class PROYECTOSIA1 {
             System.out.println("0. Volver al menú principal");
 
             System.out.print("Ingrese una opción: ");
-            input = lector.readLine();  // Leer la entrada como una cadena
+            input = lector.readLine();
 
-            // Convertir la entrada en un entero si no está vacía
             opcion = input.isEmpty() ? -1 : Integer.parseInt(input);
 
             switch (opcion) {
@@ -142,15 +138,12 @@ public class PROYECTOSIA1 {
                     System.out.println("Ingrese la cantidad de alumnos presentes: ");
                     int presentes = Integer.parseInt(lector.readLine());
 
-                    // Obtiene la fecha como String y la convierte a LocalDate
                     String fechaStr = fechasCalendario.get(indiceFechaActual);
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy", Locale.forLanguageTag("es"));
                     LocalDate fechaAsistencia = LocalDate.parse(fechaStr, formatter);
 
-                    // Verifica si ya existe un registro de asistencia para esta fecha
                     RegistroAsistencia registro = clase.getAsistenciasPorFecha().get(fechaAsistencia);
 
-                    // Si existe, pide confirmación para sobrescribir
                     if (registro != null) {
                         System.out.println("Ya existe un registro de asistencia para esta fecha. ¿Desea sobrescribirlo? (S/N)");
                         String confirmacion = lector.readLine();
@@ -160,10 +153,9 @@ public class PROYECTOSIA1 {
                         }
                     }
 
-                    // Si el usuario confirma la sobrescritura o no existe registro previo, procede a actualizar o crear el registro
-                    registro = new RegistroAsistencia(fechaAsistencia, clase.getTotalAlumnos()); // Inicializa un nuevo registro o reutiliza el existente
-                    registro.registrarAsistencia(presentes); // Actualiza la asistencia
-                    clase.getAsistenciasPorFecha().put(fechaAsistencia, registro); // Guarda el registro en el mapa
+                    registro = new RegistroAsistencia(fechaAsistencia, clase.getTotalAlumnos());
+                    registro.registrarAsistencia(presentes);
+                    clase.getAsistenciasPorFecha().put(fechaAsistencia, registro);
 
                     System.out.println("Registro de asistencia actualizado correctamente.");
                     break;
