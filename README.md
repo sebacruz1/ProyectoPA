@@ -1,11 +1,12 @@
 ---
+# Proyecto Programación Avanzada Primer Semestre 2024
 
 ## Alumnos
- * Sebastián Cruz
- * Joaquín Fuenzalida
- * Maximiliano Bustamante
+ - Sebastián Cruz
+ - Joaquín Fuenzalida
+ - Maximiliano Bustamante  
 
-# Sistema de Gestión Escolar
+## Sistema de Gestión Escolar
 
 Este proyecto es un sistema de gestión escolar desarrollado en Java 17, diseñado para manejar la asistencia de alumnos y la organización de cursos. Permite registrar la asistencia diaria de un colegio, agregar o eliminar alumnos, y navegar a través de un calendario escolar.
 
