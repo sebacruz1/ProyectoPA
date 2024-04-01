@@ -117,7 +117,6 @@ public class PROYECTOSIA1 {
         Map<LocalDate, RegistroAsistencia> asistenciasPorFecha = new HashMap<>();
 
         List<Alumno> alumnosCurso = gestorCSV.cargarAlumnosDesdeCSV(rutaArchivo);
-        gestorAlumnos.imprimirListaAlumnos(alumnosCurso);
         
 
         Curso clase = new Curso(nombreCurso, alumnosCurso, alumnosCurso.size(), asistenciasPorFecha);
@@ -176,7 +175,8 @@ public class PROYECTOSIA1 {
                     break;
 
                 case 3:
-                    //ver asistencia historica 
+                    gestorCSV.asistenciaHistorica(nombreCurso);
+                    espera.esperarPorEnter();
                     break;
                 case 4:
                     gestorAlumnos.agregarAlumno(clase, alumnosCurso, nombreCurso, rutaArchivo);

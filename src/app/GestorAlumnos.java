@@ -22,6 +22,11 @@ public class GestorAlumnos {
         BufferedReader lector = new BufferedReader(new InputStreamReader(System.in));
         System.out.print("Ingresa el RUT del alumno: ");
         String rut = lector.readLine();
+        
+        if (alumnos.contains(rut)) {
+            System.out.println("Alumno ua en la lista!");
+            return; 
+        }
 
         System.out.print("Ingresa el nombre del alumno: ");
         String nombre = lector.readLine();

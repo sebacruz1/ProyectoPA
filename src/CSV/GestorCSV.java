@@ -36,8 +36,6 @@ public class GestorCSV {
         try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
             String linea;
 
-            br.readLine();
-
             while ((linea = br.readLine()) != null) {
                 String[] partes = linea.split(";");
                 if (partes.length >= 3) {
@@ -54,23 +52,6 @@ public class GestorCSV {
         }
 
         return alumnos;
-    }
-
-    public Alumno cargarAlumnoPorRUT(String rutaArchivo, String rutBuscado) {
-
-        try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
-            String linea;
-            while ((linea = br.readLine()) != null) {
-                String[] partes = linea.split(";");
-                if (partes.length >= 3 && partes[0].trim().equals(rutBuscado)) {
-                    return new Alumno(partes[0].trim(), partes[1].trim(), partes[2].trim());
-                }
-            }
-        } catch (IOException e) {
-
-            System.out.println("Error al leer el archivo CSV: " + e.getMessage());
-        }
-        return null;
     }
 
     public String obtenerRutaArchivoCSV(String nombreCurso) {
@@ -105,44 +86,6 @@ public class GestorCSV {
         }
     }
 
-    public void agregarAsistencia(String rutaArchivo, int presentes, int indiceFechaActual) {
-        if (rutaArchivo == null) {
-            System.err.println("La ruta del archivo no puede ser null.");
-            return;
-        }
-
-        List<String> lineas = new ArrayList<>();
-        int lineaActual = 0; // Para llevar la cuenta de la línea actual mientras leemos el archivo
-
-        // Leer el contenido actual del archivo
-        try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
-            String linea;
-            while ((linea = br.readLine()) != null) {
-                if (lineaActual == indiceFechaActual) {
-                    // Obtenemos la fecha de la línea actual para mantenerla
-                    String fecha = linea.split(",")[0];
-                    // Reconstruimos la línea con la fecha y los presentes actualizados
-                    linea = fecha + "," + presentes;
-                }
-                lineas.add(linea);
-                lineaActual++;
-            }
-        } catch (IOException e) {
-            System.err.println("Error al leer el archivo: " + e.getMessage());
-            return;
-        }
-
-        // Reescribir el archivo con el contenido actualizado
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(rutaArchivo))) {
-            for (String linea : lineas) {
-                bw.write(linea);
-                bw.newLine();
-            }
-        } catch (IOException e) {
-            System.err.println("Error al escribir en el archivo: " + e.getMessage());
-        }
-    }
-
     public void actualizarCSV(Curso clase) {
         String rutaArchivo = obtenerRutaArchivoCSV(clase.getNombre());
 
@@ -161,7 +104,7 @@ public class GestorCSV {
         }
 
         // Sobrescribir el archivo CSV con el contenido actualizado
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(rutaArchivo, false))) { // 'false' para sobrescribir
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(rutaArchivo))) { // 'false' para sobrescribir
             for (String linea : lineasNuevas) {
                 bw.write(linea);
                 bw.newLine(); // Añade una nueva línea después de cada entrada
@@ -223,5 +166,40 @@ public class GestorCSV {
         } catch (IOException e) {
             System.err.println("Error al escribir en el archivo CSV: " + e.getMessage());
         }
+    }
+
+    public void asistenciaHistorica(String nombreCurso) {
+
+        String rutaArchivo = obtenerRutaArchivoAsistencia(nombreCurso);
+        try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
+            String linea;
+            int suma = 0;
+            int contador = 0;
+
+            while ((linea = br.readLine()) != null) {
+                String[] valores = linea.split(";"); // Asumiendo que tu CSV usa comas como delimitador
+                if (valores.length > 1) {
+                    try {
+                        int valor = Integer.parseInt(valores[1].trim()); // Extrae y convierte el valor de la segunda columna
+                        suma += valor; // Suma el valor a la suma total
+                        contador++; // Incrementa el contador de valores
+                    } catch (NumberFormatException e) {
+                        System.err.println("No se pudo convertir el valor a entero: " + valores[1]);
+                    }
+                }
+            }
+
+            if (contador > 0) {
+                double promedio = (double) suma / contador; // Calcula el promedio
+                System.out.println("El promedio de asistencia de alumnos es: " + promedio);
+            } else {
+                System.out.println("No se encontraron valores para calcular el promedio.");
+            }
+
+        } catch (IOException e) {
+            System.err.println("Ocurrió un error al leer el archivo: " + e.getMessage());
+        }
+   
+      
     }
 }
