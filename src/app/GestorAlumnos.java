@@ -12,9 +12,9 @@ public class GestorAlumnos {
         BufferedReader lector = new BufferedReader(new InputStreamReader(System.in));
         System.out.print("Ingresa el RUT del alumno: ");
         String rut = lector.readLine();
-
-        if (alumnos.contains(rut)) {
-            System.out.println("Alumno ua en la lista!");
+    // Revisa si algún alumno ya tiene el mismo RUT
+        if (alumnos.stream().anyMatch(alumno -> alumno.getRut().equalsIgnoreCase(rut))) {
+            System.out.println("Alumno ya en la lista!");
             return;
         }
 
