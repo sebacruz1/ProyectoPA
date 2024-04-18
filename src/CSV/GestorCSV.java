@@ -33,6 +33,7 @@ public class GestorCSV {
     public List<Alumno> cargarAlumnosDesdeCSV(String rutaArchivo) {
         List<Alumno> alumnos = new ArrayList<>();
 
+
         try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
             String linea;
 
@@ -193,5 +194,24 @@ public class GestorCSV {
             System.err.println("Ocurrió un error al leer el archivo: " + e.getMessage());
         }
 
+    }
+
+    public List<String> obtenerNombresCursos() {
+        List<String> aux = new ArrayList<>();
+        
+        try (BufferedReader br = new BufferedReader(new FileReader("src/CSV/files/nombrecursos.csv"))) {
+            String linea;
+            while ((linea = br.readLine()) != null){
+                aux.add(linea);
+               
+            }
+
+        } catch (IOException e) {
+            System.err.println("Ocurrió un error al leer el archivo: " + e.getMessage());
+            return null;
+
+        }
+        return aux;
+        
     }
 }

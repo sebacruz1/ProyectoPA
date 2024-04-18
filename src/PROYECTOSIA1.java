@@ -1,6 +1,7 @@
-package app;
 
+import GUI.MainFrame;
 import CSV.*;
+import app.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,11 +12,20 @@ import java.time.format.TextStyle;
 import java.util.Locale;
 import java.util.Map;
 import java.util.HashMap;
+import GUI.MainFrame;
+
+import javax.swing.SwingUtilities;
 
 public class PROYECTOSIA1 {
 
     public static void main(String[] args) throws IOException {
+        SwingUtilities.invokeLater(() -> {
+            MainFrame mainFrame = new MainFrame();
+            mainFrame.setVisible(true); // Hace visible la ventana principal
+        });
+    }
 
+    /*
         GestorCSV gestor = new GestorCSV();
         List<String> fechasCalendario = gestor.cargarFechasDesdeCSV("src/CSV/files/fechas.csv");
         LocalDate fechaActual = LocalDate.now();
@@ -187,4 +197,6 @@ public class PROYECTOSIA1 {
             }
         }
     }
+}
+     */
 }
