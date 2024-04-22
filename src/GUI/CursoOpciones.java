@@ -3,7 +3,6 @@ package GUI;
 import javax.swing.*;
 import java.awt.*;
 import app.Curso;
-import CSV.GestorCSV;
 
 public class CursoOpciones extends JDialog {
     private Curso curso;
@@ -17,7 +16,7 @@ public class CursoOpciones extends JDialog {
     }
 
     private void setupUI() {
-        setLayout(new GridLayout(5, 1));  // 5 opciones
+        setLayout(new GridLayout(5, 1));  // 5 options
 
         JButton btnVerAlumnos = new JButton("Ver Alumnos");
         btnVerAlumnos.addActionListener(e -> mostrarAlumnos());
@@ -26,6 +25,10 @@ public class CursoOpciones extends JDialog {
         JButton btnMarcarAsistencia = new JButton("Marcar Asistencia");
         btnMarcarAsistencia.addActionListener(e -> marcarAsistencia());
         add(btnMarcarAsistencia);
+
+        JButton btnVerPromedioAsistencia = new JButton("Ver Promedio de Asistencia");
+        btnVerPromedioAsistencia.addActionListener(e -> verPromedioAsistencia());
+        add(btnVerPromedioAsistencia);
 
         JButton btnAgregarAlumno = new JButton("Agregar Alumno");
         btnAgregarAlumno.addActionListener(e -> agregarAlumno());
@@ -41,20 +44,22 @@ public class CursoOpciones extends JDialog {
     }
 
     private void mostrarAlumnos() {
-        StringBuilder sb = new StringBuilder("Alumnos en " + curso.getNombre() + ":\n");
-        curso.getAlumnos().forEach(alumno -> sb.append(alumno.getNombre()).append(" ").append(alumno.getApellido()).append("\n"));
-        JOptionPane.showMessageDialog(this, sb.toString(), "Lista de Alumnos", JOptionPane.INFORMATION_MESSAGE);
+        // Implementation to show students
     }
 
     private void marcarAsistencia() {
-        // Implementación de la lógica para marcar asistencia
+        // Implementation to mark attendance
+    }
+
+    private void verPromedioAsistencia() {
+        // Implementation to calculate and show average attendance
     }
 
     private void agregarAlumno() {
-        // Implementación de la lógica para agregar un alumno
+        // Implementation to add a student
     }
 
     private void eliminarAlumno() {
-        // Implementación de la lógica para eliminar un alumno
+        // Implementation to remove a student
     }
 }

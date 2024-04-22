@@ -23,7 +23,9 @@ public class PROYECTOSIA1 {
             MainFrame mainFrame = new MainFrame();
             mainFrame.setVisible(true); // Hace visible la ventana principal
         });
+
     }
+
 
     /*
         GestorCSV gestor = new GestorCSV();

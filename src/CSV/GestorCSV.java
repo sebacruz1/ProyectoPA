@@ -32,26 +32,30 @@ public class GestorCSV {
 
     public List<Alumno> cargarAlumnosDesdeCSV(String rutaArchivo) {
         List<Alumno> alumnos = new ArrayList<>();
+        if (rutaArchivo == null || rutaArchivo.isEmpty()) {
+            System.out.println("File path is null or empty");
+            return alumnos;  // Return empty list or handle error appropriately
+        }
+        File file = new File(rutaArchivo);
+        if (!file.exists()) {
+            System.out.println("File does not exist: " + rutaArchivo);
+            return alumnos;  // Return empty list or handle error appropriately
+        }
 
-
-        try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String linea;
-
             while ((linea = br.readLine()) != null) {
                 String[] partes = linea.split(";");
                 if (partes.length >= 3) {
-
                     String rut = partes[0].trim();
                     String nombre = partes[1].trim();
                     String apellido = partes[2].trim();
-
                     alumnos.add(new Alumno(rut, nombre, apellido));
                 }
             }
         } catch (IOException e) {
-            System.out.println("Error al leer el archivo CSV: " + e.getMessage());
+            System.out.println("Error reading the CSV file: " + e.getMessage());
         }
-
         return alumnos;
     }
 
@@ -198,12 +202,12 @@ public class GestorCSV {
 
     public List<String> obtenerNombresCursos() {
         List<String> aux = new ArrayList<>();
-        
+
         try (BufferedReader br = new BufferedReader(new FileReader("src/CSV/files/nombrecursos.csv"))) {
             String linea;
-            while ((linea = br.readLine()) != null){
+            while ((linea = br.readLine()) != null) {
                 aux.add(linea);
-               
+
             }
 
         } catch (IOException e) {
@@ -212,6 +216,6 @@ public class GestorCSV {
 
         }
         return aux;
-        
+
     }
 }

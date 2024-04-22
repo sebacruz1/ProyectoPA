@@ -2,17 +2,16 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
-import CSV.*;
 import app.*;
+import CSV.GestorCSV;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MainFrame extends JFrame {
-
-    public GestorCSV gestor = new GestorCSV();  // Suponiendo que esta clase puede cargar cursos y alumnos
+    private GestorCSV gestor = new GestorCSV();
+    private JComboBox<String> courseComboBox;
 
     public MainFrame() {
         setTitle("Gestión de Alumnos por Curso");
@@ -20,31 +19,58 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setupUI();
+        loadCourses();
     }
 
     private void setupUI() {
-        JPanel panel = new JPanel(new GridLayout(0, 1, 10, 10));  // Una columna, múltiples filas
+        JPanel panel = new JPanel(new GridLayout(0, 1, 10, 10));
         JScrollPane scrollPane = new JScrollPane(panel);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Suponemos que tenemos una manera de obtener una lista de nombres de cursos
-        List<String> nombresCursos = gestor.obtenerNombresCursos(); // Debes implementar este método
+        courseComboBox = new JComboBox<>();
+        panel.add(courseComboBox);
 
-        for (String nombreCurso : nombresCursos) {
-            JButton button = new JButton(nombreCurso);
-            button.addActionListener(e -> mostrarAlumnos(nombreCurso));
-            panel.add(button);
+        JButton openCursoOptions = new JButton("Open Curso Options");
+        openCursoOptions.addActionListener(e -> openCursoOptions());
+        panel.add(openCursoOptions);
+    }
+
+    private void loadCourses() {
+        List<String> courseNames = gestor.obtenerNombresCursos();
+        if (courseNames != null) {
+            courseNames.forEach(name -> courseComboBox.addItem(name));
+        } else {
+            JOptionPane.showMessageDialog(this, "Error loading courses", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-   
-    private void mostrarAlumnos(String nombreCurso) {
-        String rutaArchivo = gestor.obtenerRutaArchivoCSV(nombreCurso);
-        List<Alumno> alumnos = gestor.cargarAlumnosDesdeCSV(rutaArchivo);
-        Curso curso = new Curso(nombreCurso, alumnos, alumnos.size(), new HashMap<>());  // Asume que Curso tiene este constructor
-
-        CursoOpciones dialog = new CursoOpciones(this, "Opciones del Curso: " + nombreCurso, curso);
-        dialog.setVisible(true);
+    private void openCursoOptions() {
+        String selectedCourseName = (String) courseComboBox.getSelectedItem();
+        if (selectedCourseName == null) {
+            JOptionPane.showMessageDialog(this, "No course selected", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        Curso curso = fetchCurso(selectedCourseName);  // Implement fetching Curso based on selected name
+        if (curso == null) {
+            JOptionPane.showMessageDialog(this, "Course data not available", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        CursoOpciones opciones = new CursoOpciones(this, "Curso Options", curso);
+        opciones.setVisible(true);
     }
 
+    private Curso fetchCurso(String courseName) {
+        String rutaArchivo = gestor.obtenerRutaArchivoCSV(courseName);
+        List<Alumno> alumnos = gestor.cargarAlumnosDesdeCSV(rutaArchivo);
+        int totalAlumnos = alumnos.size();
+        System.out.println("Attempting to load file: " + rutaArchivo);
+
+        //String rutaAsistencia = gestor.obtenerRutaArchivoAsistencia(courseName);
+        //Map<LocalDate, RegistroAsistencia> asistenciasPorFecha = gestor.asistenciaHistorica(rutaAsistencia);
+        
+        
+        return new Curso(courseName, alumnos, totalAlumnos, new HashMap());
+    }
+
+    
 }
