@@ -4,11 +4,14 @@ import app.Alumno;
 import javax.swing.*;
 import java.awt.*;
 import app.Curso;
+import java.util.Calendar;
+import java.util.Date;
 
 public class CursoOpciones extends JDialog {
 
     private Curso curso;
-
+    private JSpinner dateSpinner;
+            
     public CursoOpciones(JFrame parent, String title, Curso curso) {
         super(parent, title, true);
         this.curso = curso;
@@ -39,11 +42,34 @@ public class CursoOpciones extends JDialog {
         JButton btnEliminarAlumno = new JButton("Eliminar Alumno");
         btnEliminarAlumno.addActionListener(e -> eliminarAlumno());
         add(btnEliminarAlumno);
+        
+        Date initialDate = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, -100);
+        Date earliestDate = calendar.getTime();
+        calendar.add(Calendar.YEAR, 200);
+        Date latestDate = calendar.getTime();
+        SpinnerDateModel model = new SpinnerDateModel(initialDate, earliestDate, latestDate, Calendar.DAY_OF_MONTH);
+        dateSpinner = new JSpinner(model);
+        dateSpinner.setEditor(new JSpinner.DateEditor(dateSpinner, "dd/MM/yyyy"));
+
+        add(dateSpinner);
+
+        JButton btnConfirmDate = new JButton("Confirmar Fecha");
+        btnConfirmDate.addActionListener(e -> {
+            Date selectedDate = (Date) dateSpinner.getValue();
+            // Handle the selected date
+            JOptionPane.showMessageDialog(this, "Fecha seleccionada: " + selectedDate);
+        });
+        add(btnConfirmDate);
+
 
         JButton btnCerrar = new JButton("Cerrar");
         btnCerrar.addActionListener(e -> setVisible(false));
         add(btnCerrar);
     }
+    
+    
 
     private void mostrarAlumnos() {
         // Check if curso and alumnos list are not null
@@ -53,7 +79,7 @@ public class CursoOpciones extends JDialog {
         }
 
         // Building the student list string
-        StringBuilder sb = new StringBuilder("<html><table><tr><th>Name</th><th>RUT</th></tr>");
+        StringBuilder sb = new StringBuilder("<html><table><tr><th>Nombre</th><th>Rut</th></tr>");
         for (Alumno alumno : curso.getAlumnos()) {
             sb.append("<tr><td>").append(alumno.getNombre()).append(" ").append(alumno.getApellido())
                     .append("</td><td>").append(alumno.getRut()).append("</td></tr>");
@@ -61,7 +87,7 @@ public class CursoOpciones extends JDialog {
         sb.append("</table></html>");
 
         // Displaying in a dialog
-        JOptionPane.showMessageDialog(this, sb.toString(), "List of Students in " + curso.getNombre(), JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, sb.toString(), "Estudiantes en " + curso.getNombre(), JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void marcarAsistencia() {
@@ -78,5 +104,9 @@ public class CursoOpciones extends JDialog {
 
     private void eliminarAlumno() {
         // Implementation to remove a student
+    }
+    
+    private void elegirDia() {
+        
     }
 }
