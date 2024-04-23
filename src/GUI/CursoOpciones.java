@@ -43,6 +43,10 @@ public class CursoOpciones extends JDialog {
         btnEliminarAlumno.addActionListener(e -> eliminarAlumno());
         add(btnEliminarAlumno);
         
+        JButton btnCerrar = new JButton("Cerrar");
+        btnCerrar.addActionListener(e -> setVisible(false));
+        add(btnCerrar);
+        
         Date initialDate = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, -100);
@@ -64,9 +68,7 @@ public class CursoOpciones extends JDialog {
         add(btnConfirmDate);
 
 
-        JButton btnCerrar = new JButton("Cerrar");
-        btnCerrar.addActionListener(e -> setVisible(false));
-        add(btnCerrar);
+        
     }
     
     
@@ -106,7 +108,4 @@ public class CursoOpciones extends JDialog {
         // Implementation to remove a student
     }
     
-    private void elegirDia() {
-        
-    }
 }
