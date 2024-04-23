@@ -1,10 +1,12 @@
 package GUI;
 
+import app.Alumno;
 import javax.swing.*;
 import java.awt.*;
 import app.Curso;
 
 public class CursoOpciones extends JDialog {
+
     private Curso curso;
 
     public CursoOpciones(JFrame parent, String title, Curso curso) {
@@ -44,7 +46,22 @@ public class CursoOpciones extends JDialog {
     }
 
     private void mostrarAlumnos() {
-        // Implementation to show students
+        // Check if curso and alumnos list are not null
+        if (curso == null || curso.getAlumnos() == null) {
+            JOptionPane.showMessageDialog(this, "No students data available", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Building the student list string
+        StringBuilder sb = new StringBuilder("<html><table><tr><th>Name</th><th>RUT</th></tr>");
+        for (Alumno alumno : curso.getAlumnos()) {
+            sb.append("<tr><td>").append(alumno.getNombre()).append(" ").append(alumno.getApellido())
+                    .append("</td><td>").append(alumno.getRut()).append("</td></tr>");
+        }
+        sb.append("</table></html>");
+
+        // Displaying in a dialog
+        JOptionPane.showMessageDialog(this, sb.toString(), "List of Students in " + curso.getNombre(), JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void marcarAsistencia() {

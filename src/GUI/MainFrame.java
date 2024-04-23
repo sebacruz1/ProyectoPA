@@ -62,6 +62,7 @@ public class MainFrame extends JFrame {
     private Curso fetchCurso(String courseName) {
         String rutaArchivo = gestor.obtenerRutaArchivoCSV(courseName);
         List<Alumno> alumnos = gestor.cargarAlumnosDesdeCSV(rutaArchivo);
+        System.out.print(alumnos);
         int totalAlumnos = alumnos.size();
         System.out.println("Attempting to load file: " + rutaArchivo);
 
