@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MainFrame extends JFrame {
-    private GestorCSV gestor = new GestorCSV();
+    private final GestorCSV gestor = new GestorCSV();
     private JComboBox<String> courseComboBox;
 
     public MainFrame() {
@@ -63,10 +63,9 @@ public class MainFrame extends JFrame {
         String rutaArchivo = gestor.obtenerRutaArchivoCSV(courseName);
         List<Alumno> alumnos = gestor.cargarAlumnosDesdeCSV(rutaArchivo);
         int totalAlumnos = alumnos.size();
-        System.out.println("Attempting to load file: " + rutaArchivo);
-
-        //String rutaAsistencia = gestor.obtenerRutaArchivoAsistencia(courseName);
-        //Map<LocalDate, RegistroAsistencia> asistenciasPorFecha = gestor.asistenciaHistorica(rutaAsistencia);
+       
+        String rutaAsistencia = gestor.obtenerRutaArchivoAsistencia(courseName);
+        Map<LocalDate, RegistroAsistencia> asistenciasPorFecha = gestor.;
         
         
         return new Curso(courseName, alumnos, totalAlumnos, new HashMap());
