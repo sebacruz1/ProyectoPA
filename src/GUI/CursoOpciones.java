@@ -13,6 +13,7 @@ public class CursoOpciones extends JDialog {
 
     private Curso curso;
     private JSpinner dateSpinner;
+    private GestorCSV gestor = new GestorCSV();
 
     public CursoOpciones(JFrame parent, String title, Curso curso) {
         super(parent, title, true);
@@ -23,7 +24,7 @@ public class CursoOpciones extends JDialog {
     }
 
     private void setupUI(Curso curso) {
-        setLayout(new GridLayout(5, 1)); 
+        setLayout(new GridLayout(5, 1));
 
         JButton btnVerAlumnos = new JButton("Ver Alumnos");
         btnVerAlumnos.addActionListener(e -> mostrarAlumnos());
@@ -46,7 +47,7 @@ public class CursoOpciones extends JDialog {
         add(btnEliminarAlumno);
 
         JButton btnCerrar = new JButton("Cerrar");
-        btnCerrar.addActionListener(e -> cerrar(curso));
+        btnCerrar.addActionListener(e -> setVisible(false));
         add(btnCerrar);
 
         Date initialDate = new Date();
@@ -64,7 +65,7 @@ public class CursoOpciones extends JDialog {
         JButton btnConfirmDate = new JButton("Confirmar Fecha");
         btnConfirmDate.addActionListener(e -> {
             Date selectedDate = (Date) dateSpinner.getValue();
-            // Handle the selected date
+
             JOptionPane.showMessageDialog(this, "Fecha seleccionada: " + selectedDate);
         });
         add(btnConfirmDate);
@@ -85,16 +86,11 @@ public class CursoOpciones extends JDialog {
                     .append("</td><td>").append(alumno.getRut()).append("</td></tr>");
         }
         sb.append("</table></html>");
-
-        // Creating a JLabel with the student list
         JLabel label = new JLabel(sb.toString());
         label.setVerticalAlignment(SwingConstants.TOP);
-
-        // Making the label scrollable
         JScrollPane scrollPane = new JScrollPane(label);
         scrollPane.setPreferredSize(new Dimension(350, 200));  // Set the preferred size of the scroll pane
 
-        // Displaying in a dialog with a scroll pane
         JOptionPane.showMessageDialog(this, scrollPane, "Estudiantes en " + curso.getNombre(), JOptionPane.INFORMATION_MESSAGE);
     }
 
@@ -107,6 +103,7 @@ public class CursoOpciones extends JDialog {
     }
 
     private void agregarAlumno(Curso curso) {
+
         List<Alumno> auxAlumnos;
         auxAlumnos = curso.getAlumnos();
 
@@ -133,6 +130,7 @@ public class CursoOpciones extends JDialog {
             auxAlumnos.add(nuevoAlumno);
 
             curso.setAlumnos(auxAlumnos);
+            gestor.actualizarCSV(curso);
 
             JOptionPane.showMessageDialog(this, "Alumno agregado: " + nombre + " RUT: " + rut);
         }
@@ -140,15 +138,23 @@ public class CursoOpciones extends JDialog {
     }
 
     private void eliminarAlumno() {
-        // Implementation to remove a student
-    }
-    
-    private void cerrar(Curso nombreCurso){
-        GestorCSV gestor = new GestorCSV();
+        List<Alumno> auxAlumnos;
+
+        auxAlumnos = curso.getAlumnos();
+        JTextField rutField = new JTextField(10);
+        JPanel panel = new JPanel(new GridLayout(0, 1));
+        panel.add(new JLabel("RUT:"));
+        panel.add(rutField);
+
+        int result = JOptionPane.showConfirmDialog(this, panel, "Ingrese los datos del alumno", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (result == JOptionPane.OK_OPTION) {
+            String rut = rutField.getText();
+            curso.getAlumnos().removeIf(alumno -> alumno.getRut().equalsIgnoreCase(rut));
+        }
+
+        curso.setAlumnos(auxAlumnos);
         gestor.actualizarCSV(curso);
-        setVisible(false);
-        
-        
+
     }
 
 }
