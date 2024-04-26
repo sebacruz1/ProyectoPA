@@ -64,8 +64,8 @@ public class MainFrame extends JFrame {
         List<Alumno> alumnos = gestor.cargarAlumnosDesdeCSV(rutaArchivo);
         int totalAlumnos = alumnos.size();
        
-        String rutaAsistencia = gestor.obtenerRutaArchivoAsistencia(courseName);
-        Map<LocalDate, RegistroAsistencia> asistenciasPorFecha = gestor.;
+        //String rutaAsistencia = gestor.obtenerRutaArchivoAsistencia(courseName);
+        //Map<LocalDate, RegistroAsistencia> asistenciasPorFecha = gestor.;
         
         
         return new Curso(courseName, alumnos, totalAlumnos, new HashMap());
