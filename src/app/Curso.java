@@ -1,8 +1,11 @@
 package app;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
+import java.util.Date;
+
 
 public class Curso {
 
@@ -57,4 +60,10 @@ public class Curso {
     public void setAsistenciasPorFecha(Map<LocalDate, RegistroAsistencia> asistenciasPorFecha) {
         this.asistenciasPorFecha = asistenciasPorFecha;
     }
+    
+    public LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
+    return dateToConvert.toInstant()
+      .atZone(ZoneId.systemDefault())
+      .toLocalDate();
+}
 }

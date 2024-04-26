@@ -5,6 +5,7 @@ import CSV.*;
 import javax.swing.*;
 import java.awt.*;
 import app.Curso;
+import java.awt.event.ActionEvent;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -12,7 +13,6 @@ import java.util.List;
 public class CursoOpciones extends JDialog {
 
     private Curso curso;
-    private JSpinner dateSpinner;
     private final GestorCSV gestor = new GestorCSV();
 
     public CursoOpciones(JFrame parent, String title, Curso curso) {
@@ -24,7 +24,7 @@ public class CursoOpciones extends JDialog {
     }
 
     private void setupUI(Curso curso) {
-        setLayout(new GridLayout(5, 1));
+        setLayout(new GridLayout(3, 1));
 
         JButton btnVerAlumnos = new JButton("Ver Alumnos");
         btnVerAlumnos.addActionListener(e -> mostrarAlumnos());
@@ -50,36 +50,15 @@ public class CursoOpciones extends JDialog {
         btnCerrar.addActionListener(e -> setVisible(false));
         add(btnCerrar);
 
-        Date initialDate = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.YEAR, -100);
-        Date earliestDate = calendar.getTime();
-        calendar.add(Calendar.YEAR, 200);
-        Date latestDate = calendar.getTime();
-        SpinnerDateModel model = new SpinnerDateModel(initialDate, earliestDate, latestDate, Calendar.DAY_OF_MONTH);
-        dateSpinner = new JSpinner(model);
-        dateSpinner.setEditor(new JSpinner.DateEditor(dateSpinner, "dd/MM/yyyy"));
-
-        add(dateSpinner);
-
-        JButton btnConfirmDate = new JButton("Confirmar Fecha");
-        btnConfirmDate.addActionListener(e -> {
-            Date selectedDate = (Date) dateSpinner.getValue();
-
-            JOptionPane.showMessageDialog(this, "Fecha seleccionada: " + selectedDate);
-        });
-        add(btnConfirmDate);
-
     }
 
     private void mostrarAlumnos() {
 
         if (curso == null || curso.getAlumnos() == null) {
-            JOptionPane.showMessageDialog(this, "No students data available", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "No estudiantes disponibles", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Building the student list string in HTML format
         StringBuilder sb = new StringBuilder("<html><table><tr><th>Nombre</th><th>Rut</th></tr>");
         for (Alumno alumno : curso.getAlumnos()) {
             sb.append("<tr><td>").append(alumno.getNombre()).append(" ").append(alumno.getApellido())
@@ -95,7 +74,60 @@ public class CursoOpciones extends JDialog {
     }
 
     private void marcarAsistencia() {
-        // Implementation to mark attendance
+        JFrame frame = new JFrame("Marcar Asistencia");
+        frame.setLayout(new GridLayout(3, 1));
+        Date initialDate = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, -100);
+        Date earliestDate = calendar.getTime();
+        calendar.add(Calendar.YEAR, 200);
+        Date latestDate = calendar.getTime();
+        SpinnerDateModel model = new SpinnerDateModel(initialDate, earliestDate, latestDate, Calendar.DAY_OF_MONTH);
+        JSpinner spinner = new JSpinner(model);
+        spinner.setEditor(new JSpinner.DateEditor(spinner, "dd/MM/yyyy"));
+
+        JPanel panel = new JPanel(new GridLayout(0, 1));
+        panel.add(spinner);
+        JButton btnConfirmDate = new JButton("Confirmar Fecha");
+        btnConfirmDate.addActionListener((ActionEvent e) -> {
+            Date selectedDate;
+            selectedDate = (Date) spinner.getValue();
+            JOptionPane.showMessageDialog(frame, "Fecha seleccionada: " + selectedDate);
+        });
+        panel.add(btnConfirmDate);
+
+        frame.add(panel);
+
+        JTextField cantidadDePresentes = new JTextField(10);
+        panel.add(new JLabel("Cantidad De Presentes:"));
+        panel.add(cantidadDePresentes);
+
+        
+        int result = JOptionPane.showConfirmDialog(frame, panel, "Marcar Asistencia: ", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        
+        String cantidadPresente = cantidadDePresentes.getText();
+
+         if (result == JOptionPane.OK_OPTION) {
+             try 
+		{ 
+			Integer.valueOf(cantidadPresente); 
+		}  
+		catch (NumberFormatException e)  
+		{
+                    JOptionPane.showMessageDialog(this, "Se admiten solo números enteros", "Error",JOptionPane.ERROR_MESSAGE);
+                    return;    
+		} 
+             
+         }
+        
+        
+        
+        int presentes = Integer.parseInt(cantidadPresente);
+        
+        //curso.registrarAsistencia(fecha, presentes);
+        
+
+        
     }
 
     private void verPromedioAsistencia() {
@@ -124,9 +156,10 @@ public class CursoOpciones extends JDialog {
             String rut = rutField.getText();
             String nombre = nombreField.getText();
             String apellido = apellidoField.getText();
-            
+
             if (auxAlumnos.stream().anyMatch(alumno -> alumno.getRut().equalsIgnoreCase(rut))) {
-                JOptionPane.showMessageDialog(this, "Alumno: " + nombre + " RUT: " + rut + " ya existe!");
+                JOptionPane.showMessageDialog(this, "Alumno: " + nombre + " RUT: " + rut + " ya existe!", "Error", JOptionPane.ERROR_MESSAGE);
+                
 
                 return;
             }
@@ -156,7 +189,7 @@ public class CursoOpciones extends JDialog {
         if (result == JOptionPane.OK_OPTION) {
             String rut = rutField.getText();
             if (!auxAlumnos.stream().anyMatch(alumno -> alumno.getRut().equalsIgnoreCase(rut))) {
-                JOptionPane.showMessageDialog(this, "Alumno con rut: " + rut + " no existe!");
+                JOptionPane.showMessageDialog(this, "Alumno con rut: " + rut + " no existe!","Error", JOptionPane.ERROR_MESSAGE );
 
                 return;
             }
