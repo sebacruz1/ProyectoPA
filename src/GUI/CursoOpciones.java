@@ -13,7 +13,7 @@ public class CursoOpciones extends JDialog {
 
     private Curso curso;
     private JSpinner dateSpinner;
-    private GestorCSV gestor = new GestorCSV();
+    private final GestorCSV gestor = new GestorCSV();
 
     public CursoOpciones(JFrame parent, String title, Curso curso) {
         super(parent, title, true);
@@ -73,7 +73,7 @@ public class CursoOpciones extends JDialog {
     }
 
     private void mostrarAlumnos() {
-        // Check if curso and alumnos list are not null
+
         if (curso == null || curso.getAlumnos() == null) {
             JOptionPane.showMessageDialog(this, "No students data available", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -124,6 +124,12 @@ public class CursoOpciones extends JDialog {
             String rut = rutField.getText();
             String nombre = nombreField.getText();
             String apellido = apellidoField.getText();
+            
+            if (auxAlumnos.stream().anyMatch(alumno -> alumno.getRut().equalsIgnoreCase(rut))) {
+                JOptionPane.showMessageDialog(this, "Alumno: " + nombre + " RUT: " + rut + " ya existe!");
+
+                return;
+            }
 
             Alumno nuevoAlumno = new Alumno(rut, nombre, apellido);
 
@@ -149,6 +155,12 @@ public class CursoOpciones extends JDialog {
         int result = JOptionPane.showConfirmDialog(this, panel, "Ingrese los datos del alumno", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             String rut = rutField.getText();
+            if (!auxAlumnos.stream().anyMatch(alumno -> alumno.getRut().equalsIgnoreCase(rut))) {
+                JOptionPane.showMessageDialog(this, "Alumno con rut: " + rut + " no existe!");
+
+                return;
+            }
+
             curso.getAlumnos().removeIf(alumno -> alumno.getRut().equalsIgnoreCase(rut));
         }
 
