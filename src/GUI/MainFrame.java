@@ -50,7 +50,7 @@ public class MainFrame extends JFrame {
             JOptionPane.showMessageDialog(this, "No course selected", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        Curso curso = fetchCurso(selectedCourseName);  // Implement fetching Curso based on selected name
+        Curso curso = fetchCurso(selectedCourseName);
         if (curso == null) {
             JOptionPane.showMessageDialog(this, "Course data not available", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -63,7 +63,7 @@ public class MainFrame extends JFrame {
         String rutaArchivo = gestor.obtenerRutaArchivoCSV(courseName);
         List<Alumno> alumnos = gestor.cargarAlumnosDesdeCSV(rutaArchivo);
         int totalAlumnos = alumnos.size();
-       
+        
         //String rutaAsistencia = gestor.obtenerRutaArchivoAsistencia(courseName);
         //Map<LocalDate, RegistroAsistencia> asistenciasPorFecha = gestor.;
         
