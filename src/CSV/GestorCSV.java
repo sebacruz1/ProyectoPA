@@ -7,11 +7,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import app.*;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import javax.swing.JOptionPane;
 
 public class GestorCSV {
 
@@ -117,6 +120,7 @@ public class GestorCSV {
         }
     }
 
+
     public void actualizarAsistenciasCSV(Curso curso) {
         String rutaArchivoAsistencia = obtenerRutaArchivoAsistencia(curso.getNombre());
 
@@ -126,10 +130,10 @@ public class GestorCSV {
         }
 
         Map<String, String> asistenciasActualizadas = new HashMap<>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy", Locale.forLanguageTag("es"));
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy", Locale.forLanguageTag("es"));
 
-        for (Map.Entry<LocalDate, RegistroAsistencia> entry : curso.getAsistenciasPorFecha().entrySet()) {
-            String fecha = entry.getKey().format(formatter);
+        for (Map.Entry<Date, RegistroAsistencia> entry : curso.getAsistenciasPorFecha().entrySet()) {
+            String fecha = formatter.format(entry.getKey());
             String asistencia = String.valueOf(entry.getValue().getAlumnosPresentes());
             asistenciasActualizadas.put(fecha, fecha + ";" + asistencia);
         }
@@ -140,11 +144,9 @@ public class GestorCSV {
             while ((linea = br.readLine()) != null) {
                 String[] partes = linea.split(";");
                 if (partes.length > 0 && asistenciasActualizadas.containsKey(partes[0])) {
-
                     lineasActualizadas.add(asistenciasActualizadas.get(partes[0]));
                     asistenciasActualizadas.remove(partes[0]);
                 } else {
-
                     lineasActualizadas.add(linea);
                 }
             }
@@ -160,9 +162,11 @@ public class GestorCSV {
                 bw.write(lineaActualizada);
                 bw.newLine();
             }
-            System.out.println("Archivo CSV de asistencia actualizado con éxito para el curso: " + curso.getNombre());
+            
+       
         } catch (IOException e) {
-            System.err.println("Error al escribir en el archivo CSV: " + e.getMessage());
+            // mensaje de error 
+
         }
     }
 

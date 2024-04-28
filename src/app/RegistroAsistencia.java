@@ -1,13 +1,13 @@
 package app;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 public class RegistroAsistencia {
-    private LocalDate fecha;
+    private Date fecha;
     private int alumnosPresentes;
     private int totalAlumnos;
 
-    public RegistroAsistencia(LocalDate fecha, int totalAlumnos) {
+    public RegistroAsistencia(Date fecha, int totalAlumnos) {
         this.fecha = fecha;
         this.totalAlumnos = totalAlumnos;
         this.alumnosPresentes = 0;  
@@ -18,11 +18,11 @@ public class RegistroAsistencia {
     }
 
     
-    public LocalDate getFecha() {
+    public Date getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDate fecha) {
+    public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
 

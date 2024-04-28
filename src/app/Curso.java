@@ -1,20 +1,18 @@
 package app;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Date;
-
 
 public class Curso {
 
     private String nombre;
     private List<Alumno> alumnos;
     private int totalAlumnos;
-    private Map<LocalDate, RegistroAsistencia> asistenciasPorFecha;
+    private Map<Date, RegistroAsistencia> asistenciasPorFecha;
 
-    public Curso(String nombre, List<Alumno> alumnos, int totalAlumnos, Map<LocalDate, RegistroAsistencia> asistenciaPorFecha) {
+    public Curso(String nombre, List<Alumno> alumnos, int totalAlumnos, Map<Date, RegistroAsistencia> asistenciaPorFecha) {
         this.nombre = nombre;
         this.alumnos = alumnos;
         this.totalAlumnos = totalAlumnos;
@@ -45,25 +43,35 @@ public class Curso {
         this.totalAlumnos = alumnos;
     }
 
-    public void registrarAsistencia(LocalDate fecha, int cantidadAlumnosPresentes) {
-        if (!asistenciasPorFecha.containsKey(fecha)) {
-            asistenciasPorFecha.put(fecha, new RegistroAsistencia(fecha, totalAlumnos));
-        }
-        RegistroAsistencia registro = asistenciasPorFecha.get(fecha);
-        registro.registrarAsistencia(cantidadAlumnosPresentes);
+// Utility method to truncate Date to day without time
+    private Date truncateToDate(Date fecha) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(fecha);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
     }
 
-    public Map<LocalDate, RegistroAsistencia> getAsistenciasPorFecha() {
+    public Map<Date, RegistroAsistencia> getAsistenciasPorFecha() {
         return asistenciasPorFecha;
     }
 
-    public void setAsistenciasPorFecha(Map<LocalDate, RegistroAsistencia> asistenciasPorFecha) {
+    public void setAsistenciasPorFecha(Map<Date, RegistroAsistencia> asistenciasPorFecha) {
         this.asistenciasPorFecha = asistenciasPorFecha;
     }
-    
-    public LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
-    return dateToConvert.toInstant()
-      .atZone(ZoneId.systemDefault())
-      .toLocalDate();
-}
+
+
+    public void registrarAsistencia(Date fecha, int cantidadAlumnosPresentes) {
+        // Ensure the date is truncated to the day (without time)
+        Date truncatedDate = truncateToDate(fecha);
+
+        if (!asistenciasPorFecha.containsKey(truncatedDate)) {
+            asistenciasPorFecha.put(truncatedDate, new RegistroAsistencia(truncatedDate, totalAlumnos));
+        }
+        RegistroAsistencia registro = asistenciasPorFecha.get(truncatedDate);
+        registro.registrarAsistencia(cantidadAlumnosPresentes);
+    }
+
 }

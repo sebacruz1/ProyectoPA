@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import app.Curso;
 import java.awt.event.ActionEvent;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -86,13 +87,15 @@ public class CursoOpciones extends JDialog {
         JSpinner spinner = new JSpinner(model);
         spinner.setEditor(new JSpinner.DateEditor(spinner, "dd/MM/yyyy"));
 
+        Date[] fechaContainer = new Date[1];  // Mutable container
+        fechaContainer[0] = initialDate;
+
         JPanel panel = new JPanel(new GridLayout(0, 1));
         panel.add(spinner);
         JButton btnConfirmDate = new JButton("Confirmar Fecha");
         btnConfirmDate.addActionListener((ActionEvent e) -> {
-            Date selectedDate;
-            selectedDate = (Date) spinner.getValue();
-            JOptionPane.showMessageDialog(frame, "Fecha seleccionada: " + selectedDate);
+            fechaContainer[0] = (Date) spinner.getValue(); // Update the container's content
+            JOptionPane.showMessageDialog(frame, "Fecha seleccionada: " + fechaContainer[0]);
         });
         panel.add(btnConfirmDate);
 
@@ -102,32 +105,21 @@ public class CursoOpciones extends JDialog {
         panel.add(new JLabel("Cantidad De Presentes:"));
         panel.add(cantidadDePresentes);
 
-        
         int result = JOptionPane.showConfirmDialog(frame, panel, "Marcar Asistencia: ", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-        
         String cantidadPresente = cantidadDePresentes.getText();
 
-         if (result == JOptionPane.OK_OPTION) {
-             try 
-		{ 
-			Integer.valueOf(cantidadPresente); 
-		}  
-		catch (NumberFormatException e)  
-		{
-                    JOptionPane.showMessageDialog(this, "Se admiten solo números enteros", "Error",JOptionPane.ERROR_MESSAGE);
-                    return;    
-		} 
-             
-         }
-        
-        
-        
-        int presentes = Integer.parseInt(cantidadPresente);
-        
-        //curso.registrarAsistencia(fecha, presentes);
-        
+        if (result == JOptionPane.OK_OPTION) {
+            try {
+                Integer.valueOf(cantidadPresente);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(frame, "Se admiten solo números enteros", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
 
-        
+        int presentes = Integer.parseInt(cantidadPresente);
+        curso.registrarAsistencia(fechaContainer[0], presentes);
+        gestor.actualizarAsistenciasCSV(curso);
     }
 
     private void verPromedioAsistencia() {
@@ -159,7 +151,6 @@ public class CursoOpciones extends JDialog {
 
             if (auxAlumnos.stream().anyMatch(alumno -> alumno.getRut().equalsIgnoreCase(rut))) {
                 JOptionPane.showMessageDialog(this, "Alumno: " + nombre + " RUT: " + rut + " ya existe!", "Error", JOptionPane.ERROR_MESSAGE);
-                
 
                 return;
             }
@@ -189,7 +180,7 @@ public class CursoOpciones extends JDialog {
         if (result == JOptionPane.OK_OPTION) {
             String rut = rutField.getText();
             if (!auxAlumnos.stream().anyMatch(alumno -> alumno.getRut().equalsIgnoreCase(rut))) {
-                JOptionPane.showMessageDialog(this, "Alumno con rut: " + rut + " no existe!","Error", JOptionPane.ERROR_MESSAGE );
+                JOptionPane.showMessageDialog(this, "Alumno con rut: " + rut + " no existe!", "Error", JOptionPane.ERROR_MESSAGE);
 
                 return;
             }

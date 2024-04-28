@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import app.*;
 import CSV.GestorCSV;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +65,7 @@ public class MainFrame extends JFrame {
         int totalAlumnos = alumnos.size();
         
   
-        Map<LocalDate, RegistroAsistencia> asistenciasPorFecha = new HashMap();
+        Map<Date, RegistroAsistencia> asistenciasPorFecha = new HashMap();
         
         
         return new Curso(courseName, alumnos, totalAlumnos, asistenciasPorFecha);
