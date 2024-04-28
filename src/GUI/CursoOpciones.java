@@ -6,14 +6,13 @@ import javax.swing.*;
 import java.awt.*;
 import app.Curso;
 import java.awt.event.ActionEvent;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 public class CursoOpciones extends JDialog {
 
-    private Curso curso;
+    private final Curso curso;
     private final GestorCSV gestor = new GestorCSV();
 
     public CursoOpciones(JFrame parent, String title, Curso curso) {
@@ -48,8 +47,8 @@ public class CursoOpciones extends JDialog {
         add(btnEliminarAlumno);
 
         JButton btnCerrar = new JButton("Cerrar");
-        btnCerrar.addActionListener(e -> setVisible(false));
         add(btnCerrar);
+        btnCerrar.addActionListener(e -> cerrar());
 
     }
 
@@ -69,7 +68,7 @@ public class CursoOpciones extends JDialog {
         JLabel label = new JLabel(sb.toString());
         label.setVerticalAlignment(SwingConstants.TOP);
         JScrollPane scrollPane = new JScrollPane(label);
-        scrollPane.setPreferredSize(new Dimension(350, 200));  // Set the preferred size of the scroll pane
+        scrollPane.setPreferredSize(new Dimension(350, 200));
 
         JOptionPane.showMessageDialog(this, scrollPane, "Estudiantes en " + curso.getNombre(), JOptionPane.INFORMATION_MESSAGE);
     }
@@ -87,15 +86,16 @@ public class CursoOpciones extends JDialog {
         JSpinner spinner = new JSpinner(model);
         spinner.setEditor(new JSpinner.DateEditor(spinner, "dd/MM/yyyy"));
 
-        Date[] fechaContainer = new Date[1];  // Mutable container
+        Date[] fechaContainer = new Date[1];
         fechaContainer[0] = initialDate;
 
         JPanel panel = new JPanel(new GridLayout(0, 1));
         panel.add(spinner);
         JButton btnConfirmDate = new JButton("Confirmar Fecha");
         btnConfirmDate.addActionListener((ActionEvent e) -> {
-            fechaContainer[0] = (Date) spinner.getValue(); // Update the container's content
+            fechaContainer[0] = (Date) spinner.getValue();
             JOptionPane.showMessageDialog(frame, "Fecha seleccionada: " + fechaContainer[0]);
+            setVisible(true);
         });
         panel.add(btnConfirmDate);
 
@@ -106,6 +106,12 @@ public class CursoOpciones extends JDialog {
         panel.add(cantidadDePresentes);
 
         int result = JOptionPane.showConfirmDialog(frame, panel, "Marcar Asistencia: ", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (cantidadDePresentes.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(frame, "La cantidad de presentes no puede estar vacia.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
         String cantidadPresente = cantidadDePresentes.getText();
 
         if (result == JOptionPane.OK_OPTION) {
@@ -119,9 +125,7 @@ public class CursoOpciones extends JDialog {
 
         int presentes = Integer.parseInt(cantidadPresente);
         curso.registrarAsistencia(fechaContainer[0], presentes);
-        gestor.actualizarAsistenciasCSV(curso);
     }
-
 
     private void verPromedioAsistencia() {
         double promedio = gestor.asistenciaHistorica(curso.getNombre());
@@ -129,7 +133,7 @@ public class CursoOpciones extends JDialog {
         if (promedio == -1) {
             JOptionPane.showMessageDialog(this, "No se encuentra el archivo", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
-            // Showing the average value in a message dialog
+
             JOptionPane.showMessageDialog(this, "Promedio de asistencia: " + String.format("%.2f", promedio), "Promedio Asistencia", JOptionPane.INFORMATION_MESSAGE);
         }
     }
@@ -153,6 +157,20 @@ public class CursoOpciones extends JDialog {
 
         int result = JOptionPane.showConfirmDialog(this, panel, "Ingrese los datos del alumno", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
+            if (rutField.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Rut esta vacio!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (nombreField.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Nombre esta vacio!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (apellidoField.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Apellido esta vacio!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             String rut = rutField.getText();
             String nombre = nombreField.getText();
             String apellido = apellidoField.getText();
@@ -168,8 +186,6 @@ public class CursoOpciones extends JDialog {
             auxAlumnos.add(nuevoAlumno);
 
             curso.setAlumnos(auxAlumnos);
-            gestor.actualizarCSV(curso);
-
             JOptionPane.showMessageDialog(this, "Alumno agregado: " + nombre + " RUT: " + rut);
         }
 
@@ -197,7 +213,14 @@ public class CursoOpciones extends JDialog {
         }
 
         curso.setAlumnos(auxAlumnos);
+
+    }
+
+    private void cerrar() {
+        gestor.actualizarAsistenciasCSV(curso);
         gestor.actualizarCSV(curso);
+        gestor.actualizarCSV(curso);
+        setVisible(false);
 
     }
 
