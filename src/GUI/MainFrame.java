@@ -30,7 +30,7 @@ public class MainFrame extends JFrame {
         courseComboBox = new JComboBox<>();
         panel.add(courseComboBox);
 
-        JButton openCursoOptions = new JButton("Open Curso Options");
+        JButton openCursoOptions = new JButton("Abrir opciones del curso");
         openCursoOptions.addActionListener(e -> openCursoOptions());
         panel.add(openCursoOptions);
     }
@@ -40,22 +40,22 @@ public class MainFrame extends JFrame {
         if (courseNames != null) {
             courseNames.forEach(name -> courseComboBox.addItem(name));
         } else {
-            JOptionPane.showMessageDialog(this, "Error loading courses", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error cargando los cursos", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void openCursoOptions() {
         String selectedCourseName = (String) courseComboBox.getSelectedItem();
         if (selectedCourseName == null) {
-            JOptionPane.showMessageDialog(this, "No course selected", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "No hay un curso seleccionado", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         Curso curso = fetchCurso(selectedCourseName);
         if (curso == null) {
-            JOptionPane.showMessageDialog(this, "Course data not available", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "No se encuentra la informacion del curso", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        CursoOpciones opciones = new CursoOpciones(this, "Curso Options", curso);
+        CursoOpciones opciones = new CursoOpciones(this, "Opciones del curso", curso);
         opciones.setVisible(true);
     }
 
