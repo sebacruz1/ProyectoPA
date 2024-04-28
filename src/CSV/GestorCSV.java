@@ -1,28 +1,25 @@
 package CSV;
 
 import java.io.*;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import app.*;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import app.*;
+import java.text.SimpleDateFormat;
 
-
+// Clase GestorCSV se encarga de la manipulación de archivos CSV para el manejo de datos de cursos y asistencias.
 public class GestorCSV {
 
+    // Carga una lista de fechas desde un archivo CSV y la retorna.
     public List<String> cargarFechasDesdeCSV(String rutaArchivo) {
         List<String> fechas = new ArrayList<>();
-
         try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
             String linea;
             while ((linea = br.readLine()) != null) {
-
+                // Añade cada fecha a la lista, eliminando el punto y coma.
                 fechas.add(linea.replace(";", " ").trim());
             }
         } catch (IOException e) {
@@ -31,13 +28,16 @@ public class GestorCSV {
         return fechas;
     }
 
+    // Carga una lista de alumnos desde un archivo CSV y la retorna.
     public List<Alumno> cargarAlumnosDesdeCSV(String rutaArchivo) {
         List<Alumno> alumnos = new ArrayList<>();
+        // Verifica si la ruta del archivo es válida.
         if (rutaArchivo == null || rutaArchivo.isEmpty()) {
             System.out.println("Ruta esta vacia");
             return alumnos;  
         }
         File file = new File(rutaArchivo);
+        // Verifica si el archivo existe.
         if (!file.exists()) {
             System.out.println("Archivo no existe: " + rutaArchivo);
             return alumnos;  
@@ -47,10 +47,12 @@ public class GestorCSV {
             String linea;
             while ((linea = br.readLine()) != null) {
                 String[] partes = linea.split(";");
+                // Verifica que la línea tenga las partes suficientes para crear un Alumno.
                 if (partes.length >= 3) {
                     String rut = partes[0].trim();
                     String nombre = partes[1].trim();
                     String apellido = partes[2].trim();
+                    // Añade el nuevo alumno a la lista.
                     alumnos.add(new Alumno(rut, nombre, apellido));
                 }
             }
@@ -60,8 +62,9 @@ public class GestorCSV {
         return alumnos;
     }
 
+    // Obtiene la ruta del archivo CSV para un curso dado.
     public String obtenerRutaArchivoCSV(String nombreCurso) {
-
+        // Selecciona la ruta del archivo basada en el nombre del curso.
         switch (nombreCurso) {
             case "Primero Básico":
                 return "src/CSV/files/primerobasico.csv";
@@ -75,9 +78,9 @@ public class GestorCSV {
                 return null;
         }
     }
-
+    // Obtiene la ruta del archivo de asistencia CSV para un curso dado.
     public String obtenerRutaArchivoAsistencia(String nombreCurso) {
-
+        // Similar al método anterior pero para archivos de asistencia.
         switch (nombreCurso) {
             case "Primero Básico":
                 return "src/CSV/files/asistencias/asistenciaPrimero.csv";
@@ -91,7 +94,7 @@ public class GestorCSV {
                 return null;
         }
     }
-
+    // Actualiza el archivo CSV del curso con la lista actual de alumnos.
     public void actualizarCSV(Curso clase) {
         String rutaArchivo = obtenerRutaArchivoCSV(clase.getNombre());
 
@@ -120,7 +123,7 @@ public class GestorCSV {
         }
     }
 
-
+    // Actualiza el archivo CSV de asistencia para un curso con los datos actuales. 
     public void actualizarAsistenciasCSV(Curso curso) {
         String rutaArchivoAsistencia = obtenerRutaArchivoAsistencia(curso.getNombre());
 
@@ -171,7 +174,7 @@ public class GestorCSV {
 
         }
     }
-
+    // Calcula el promedio de asistencia histórica para un curso basado en su archivo CSV.
     public double asistenciaHistorica(String nombreCurso) {
 
         String rutaArchivo = obtenerRutaArchivoAsistencia(nombreCurso);
@@ -207,7 +210,7 @@ public class GestorCSV {
         return -1;
 
     }
-
+    // Obtiene una lista de nombres de cursos desde un archivo CSV.
     public List<String> obtenerNombresCursos() {
         List<String> aux = new ArrayList<>();
 
