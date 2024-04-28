@@ -122,8 +122,16 @@ public class CursoOpciones extends JDialog {
         gestor.actualizarAsistenciasCSV(curso);
     }
 
+
     private void verPromedioAsistencia() {
-        // Implementation to calculate and show average attendance
+        double promedio = gestor.asistenciaHistorica(curso.getNombre());
+
+        if (promedio == -1) {
+            JOptionPane.showMessageDialog(this, "No se encuentra el archivo", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            // Showing the average value in a message dialog
+            JOptionPane.showMessageDialog(this, "Promedio de asistencia: " + String.format("%.2f", promedio), "Promedio Asistencia", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     private void agregarAlumno(Curso curso) {

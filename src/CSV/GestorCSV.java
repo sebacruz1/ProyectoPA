@@ -8,13 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import app.*;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import javax.swing.JOptionPane;
+
 
 public class GestorCSV {
 
@@ -36,13 +34,13 @@ public class GestorCSV {
     public List<Alumno> cargarAlumnosDesdeCSV(String rutaArchivo) {
         List<Alumno> alumnos = new ArrayList<>();
         if (rutaArchivo == null || rutaArchivo.isEmpty()) {
-            System.out.println("File path is null or empty");
-            return alumnos;  // Return empty list or handle error appropriately
+            System.out.println("Ruta esta vacia");
+            return alumnos;  
         }
         File file = new File(rutaArchivo);
         if (!file.exists()) {
-            System.out.println("File does not exist: " + rutaArchivo);
-            return alumnos;  // Return empty list or handle error appropriately
+            System.out.println("Archivo no existe: " + rutaArchivo);
+            return alumnos;  
         }
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -114,9 +112,11 @@ public class GestorCSV {
                 bw.write(linea);
                 bw.newLine();
             }
-            System.out.println("Archivo CSV actualizado con éxito para el curso: " + clase.getNombre());
+            
         } catch (IOException e) {
-            System.err.println("Error al escribir en el archivo CSV: " + e.getMessage());
+            
+        // mensaje de error 
+
         }
     }
 
@@ -125,7 +125,8 @@ public class GestorCSV {
         String rutaArchivoAsistencia = obtenerRutaArchivoAsistencia(curso.getNombre());
 
         if (rutaArchivoAsistencia == null) {
-            System.err.println("No se pudo encontrar la ruta del archivo de asistencia para el curso: " + curso.getNombre());
+            // mensaje de error 
+
             return;
         }
 
@@ -151,7 +152,8 @@ public class GestorCSV {
                 }
             }
         } catch (IOException e) {
-            System.err.println("Error al leer el archivo: " + e.getMessage());
+            // mensaje de error 
+
             return;
         }
 
@@ -170,7 +172,7 @@ public class GestorCSV {
         }
     }
 
-    public void asistenciaHistorica(String nombreCurso) {
+    public double asistenciaHistorica(String nombreCurso) {
 
         String rutaArchivo = obtenerRutaArchivoAsistencia(nombreCurso);
         try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
@@ -193,7 +195,7 @@ public class GestorCSV {
 
             if (contador > 0) {
                 double promedio = (double) suma / contador;
-                System.out.println("El promedio de asistencia de alumnos es: " + promedio);
+                return promedio;
             } else {
                 System.out.println("No se encontraron valores para calcular el promedio.");
             }
@@ -201,6 +203,8 @@ public class GestorCSV {
         } catch (IOException e) {
             System.err.println("Ocurrió un error al leer el archivo: " + e.getMessage());
         }
+        
+        return -1;
 
     }
 
