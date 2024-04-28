@@ -10,49 +10,57 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+// Clase CursoOpciones que extiende de JDialog para manejar opciones relacionadas con un curso específico.
 public class CursoOpciones extends JDialog {
 
-    private final Curso curso;
-    private final GestorCSV gestor = new GestorCSV();
+    private final Curso curso;  // Instancia del curso asociado con este diálogo.
+    private final GestorCSV gestor = new GestorCSV(); // Gestor para operaciones de CSV.
 
+    // Constructor de la clase que configura el diálogo.
     public CursoOpciones(JFrame parent, String title, Curso curso) {
-        super(parent, title, true);
-        this.curso = curso;
-        setSize(300, 200);
-        setLocationRelativeTo(parent);
-        setupUI(curso);
+        super(parent, title, true); // Llama al constructor de la clase padre JDialog.
+        this.curso = curso; // Inicializa la variable del curso.
+        setSize(300, 200); // Establece el tamaño del diálogo.
+        setLocationRelativeTo(parent); // Centra el diálogo con respecto a su ventana padre.
+        setupUI(curso); // Método para configurar la interfaz de usuario.
     }
 
+    // Método para configurar la interfaz de usuario.
     private void setupUI(Curso curso) {
-        setLayout(new GridLayout(3, 1));
+        setLayout(new GridLayout(3, 1)); // Establece el layout del panel.
 
+        // Botón para ver los alumnos del curso.
         JButton btnVerAlumnos = new JButton("Ver Alumnos");
         btnVerAlumnos.addActionListener(e -> mostrarAlumnos());
         add(btnVerAlumnos);
 
+        // Botón para marcar la asistencia de los alumnos.
         JButton btnMarcarAsistencia = new JButton("Marcar Asistencia");
         btnMarcarAsistencia.addActionListener(e -> marcarAsistencia());
         add(btnMarcarAsistencia);
 
+        // Botón para ver el promedio de asistencia de los alumnos.
         JButton btnVerPromedioAsistencia = new JButton("Ver Promedio de Asistencia");
         btnVerPromedioAsistencia.addActionListener(e -> verPromedioAsistencia());
         add(btnVerPromedioAsistencia);
 
+        // Botón para agregar un nuevo alumno al curso.
         JButton btnAgregarAlumno = new JButton("Agregar Alumno");
         btnAgregarAlumno.addActionListener(e -> agregarAlumno(curso));
         add(btnAgregarAlumno);
 
+        // Botón para eliminar un alumno del curso.
         JButton btnEliminarAlumno = new JButton("Eliminar Alumno");
         btnEliminarAlumno.addActionListener(e -> eliminarAlumno());
         add(btnEliminarAlumno);
 
+        // Botón para cerrar el diálogo.
         JButton btnCerrar = new JButton("Cerrar");
         add(btnCerrar);
         btnCerrar.addActionListener(e -> cerrar());
-
     }
-
-    private void mostrarAlumnos() {
+// Métodos privados de la clase para manejar las acciones de los botones.
+    private void mostrarAlumnos() { // Implementación para mostrar los alumnos.
 
         if (curso == null || curso.getAlumnos() == null) {
             JOptionPane.showMessageDialog(this, "No estudiantes disponibles", "Error", JOptionPane.ERROR_MESSAGE);
@@ -73,7 +81,7 @@ public class CursoOpciones extends JDialog {
         JOptionPane.showMessageDialog(this, scrollPane, "Estudiantes en " + curso.getNombre(), JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private void marcarAsistencia() {
+    private void marcarAsistencia() {   // Implementación para marcar asistencia.
         JFrame frame = new JFrame("Marcar Asistencia");
         frame.setLayout(new GridLayout(3, 1));
         Date initialDate = new Date();
@@ -127,7 +135,7 @@ public class CursoOpciones extends JDialog {
         curso.registrarAsistencia(fechaContainer[0], presentes);
     }
 
-    private void verPromedioAsistencia() {
+    private void verPromedioAsistencia() {  // Implementación para calcular y mostrar el promedio de asistencia.
         double promedio = gestor.asistenciaHistorica(curso.getNombre());
 
         if (promedio == -1) {
@@ -138,7 +146,7 @@ public class CursoOpciones extends JDialog {
         }
     }
 
-    private void agregarAlumno(Curso curso) {
+    private void agregarAlumno(Curso curso) {   // Implementación para agregar un nuevo alumno.
 
         List<Alumno> auxAlumnos;
         auxAlumnos = curso.getAlumnos();
@@ -191,7 +199,7 @@ public class CursoOpciones extends JDialog {
 
     }
 
-    private void eliminarAlumno() {
+    private void eliminarAlumno() { // Implementación para eliminar un alumno.
         List<Alumno> auxAlumnos;
 
         auxAlumnos = curso.getAlumnos();
@@ -216,7 +224,7 @@ public class CursoOpciones extends JDialog {
 
     }
 
-    private void cerrar() {
+    private void cerrar() { // Implementación para cerrar el diálogo y guardar cambios si es necesario.
         gestor.actualizarAsistenciasCSV(curso);
         gestor.actualizarCSV(curso);
         gestor.actualizarCSV(curso);
