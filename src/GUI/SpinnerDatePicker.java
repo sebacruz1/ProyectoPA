@@ -21,7 +21,7 @@ public class SpinnerDatePicker {
         calendar.setTime(initialDate); 
         Date earliestDate = calendar.getTime();
         calendar.add(Calendar.YEAR, 50);
-        Date latestDate = calendar.getTime(); .
+        Date latestDate = calendar.getTime();
 
         // Modelo de datos para el spinner, configurado con las fechas establecidas.
         SpinnerModel dateModel = new SpinnerDateModel(initialDate, earliestDate, latestDate, Calendar.YEAR);

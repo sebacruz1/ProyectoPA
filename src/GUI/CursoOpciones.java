@@ -29,9 +29,16 @@ public class CursoOpciones extends JDialog {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                cerrar();
+                dispose();
             }
         });
+    }
+
+    @Override
+    public void dispose() {
+        // Cleanup before closing the dialog
+        cerrar();  // Calls the custom close method that includes CSV updates and visibility changes.
+        super.dispose();  // Calls the superclass method to clean up the dialog's native resources.
     }
 
     // Método para configurar la interfaz de usuario.

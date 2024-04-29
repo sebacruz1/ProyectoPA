@@ -233,7 +233,7 @@ public class GestorCSV {
         if (nombreCursos != null) {
             for (int i = 0; i < nombreCursos.size(); i++) {
                 double auxAsistencia = asistenciaHistorica(nombreCursos.get(i));
-                System.out.print(auxAsistencia);
+               
                 if (auxAsistencia < 20) {
                     continue;
                 }

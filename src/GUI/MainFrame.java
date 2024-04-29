@@ -22,22 +22,31 @@ public class MainFrame extends JFrame {
         setupUI();  
         loadCourses(); 
     }
-
+    
+ 
     // Método para configurar los componentes de la interfaz de usuario.
     private void setupUI() {
         JPanel panel = new JPanel(new GridLayout(0, 1, 10, 10)); 
         JScrollPane scrollPane = new JScrollPane(panel);  
         add(scrollPane, BorderLayout.CENTER); 
 
-        courseComboBox = new JComboBox<>(); 
+
+        courseComboBox = new JComboBox<>();  
         panel.add(courseComboBox);  
-        JButton openCursoOptions = new JButton("Open Curso Options");  
+
+        JButton openCursoOptions = new JButton("Abrir opciones del curso");
         openCursoOptions.addActionListener(e -> openCursoOptions());  
-        panel.add(openCursoOptions); 
+        panel.add(openCursoOptions);  
+
         
         JButton btnMostrarCursos = new JButton("Mostrar cursos con asistencia mayor a 20");  
         btnMostrarCursos.addActionListener(e -> mostrar()); 
         panel.add(btnMostrarCursos); 
+        
+        
+        JButton btnSalir = new JButton("Salir");  
+        btnSalir.addActionListener(e -> salir());  
+        panel.add(btnSalir); 
         
     }
 
@@ -91,6 +100,12 @@ public class MainFrame extends JFrame {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        
+    }
+    
+    private void salir() {
+        dispose();
+        System.exit(0);
         
     }
 }
