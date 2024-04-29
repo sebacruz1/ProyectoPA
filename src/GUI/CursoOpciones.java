@@ -15,16 +15,16 @@ import java.util.List;
 // Clase CursoOpciones que extiende de JDialog para manejar opciones relacionadas con un curso específico.
 public class CursoOpciones extends JDialog {
 
-    private final Curso curso;  // Instancia del curso asociado con este diálogo.
-    private final GestorCSV gestor = new GestorCSV(); // Gestor para operaciones de CSV.
+    private final Curso curso;  
+    private final GestorCSV gestor = new GestorCSV(); 
 
     // Constructor de la clase que configura el diálogo.
     public CursoOpciones(JFrame parent, String title, Curso curso) {
-        super(parent, title, true); // Llama al constructor de la clase padre JDialog.
-        this.curso = curso; // Inicializa la variable del curso.
-        setSize(300, 200); // Establece el tamaño del diálogo.
-        setLocationRelativeTo(parent); // Centra el diálogo con respecto a su ventana padre.
-        setupUI(curso); // Método para configurar la interfaz de usuario.
+        super(parent, title, true); 
+        this.curso = curso; 
+        setSize(300, 200); 
+        setLocationRelativeTo(parent); 
+        setupUI(curso); 
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -35,15 +35,14 @@ public class CursoOpciones extends JDialog {
     }
 
     @Override
-    public void dispose() {
-        // Cleanup before closing the dialog
-        cerrar();  // Calls the custom close method that includes CSV updates and visibility changes.
-        super.dispose();  // Calls the superclass method to clean up the dialog's native resources.
+    public void dispose() {    
+        cerrar();  
+        super.dispose();  
     }
 
     // Método para configurar la interfaz de usuario.
     private void setupUI(Curso curso) {
-        setLayout(new GridLayout(3, 1)); // Establece el layout del panel.
+        setLayout(new GridLayout(3, 1)); 
 
         // Botón para ver los alumnos del curso.
         JButton btnVerAlumnos = new JButton("Ver Alumnos");
