@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import app.Curso;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +25,13 @@ public class CursoOpciones extends JDialog {
         setSize(300, 200); // Establece el tamaño del diálogo.
         setLocationRelativeTo(parent); // Centra el diálogo con respecto a su ventana padre.
         setupUI(curso); // Método para configurar la interfaz de usuario.
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                cerrar();
+            }
+        });
     }
 
     // Método para configurar la interfaz de usuario.
@@ -60,6 +69,7 @@ public class CursoOpciones extends JDialog {
         btnCerrar.addActionListener(e -> cerrar());
     }
 // Métodos privados de la clase para manejar las acciones de los botones.
+
     private void mostrarAlumnos() { // Implementación para mostrar los alumnos.
 
         if (curso == null || curso.getAlumnos() == null) {
@@ -119,7 +129,7 @@ public class CursoOpciones extends JDialog {
             JOptionPane.showMessageDialog(frame, "La cantidad de presentes no puede estar vacia.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
+
         String cantidadPresente = cantidadDePresentes.getText();
 
         if (result == JOptionPane.OK_OPTION) {
