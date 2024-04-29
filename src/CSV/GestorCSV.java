@@ -31,13 +31,11 @@ public class GestorCSV {
     // Carga una lista de alumnos desde un archivo CSV y la retorna.
     public List<Alumno> cargarAlumnosDesdeCSV(String rutaArchivo) {
         List<Alumno> alumnos = new ArrayList<>();
-        // Verifica si la ruta del archivo es válida.
         if (rutaArchivo == null || rutaArchivo.isEmpty()) {
             System.out.println("Ruta esta vacia");
             return alumnos;
         }
         File file = new File(rutaArchivo);
-        // Verifica si el archivo existe.
         if (!file.exists()) {
             System.out.println("Archivo no existe: " + rutaArchivo);
             return alumnos;
@@ -47,7 +45,6 @@ public class GestorCSV {
             String linea;
             while ((linea = br.readLine()) != null) {
                 String[] partes = linea.split(";");
-                // Verifica que la línea tenga las partes suficientes para crear un Alumno.
                 if (partes.length >= 3) {
                     String rut = partes[0].trim();
                     String nombre = partes[1].trim();
@@ -64,7 +61,6 @@ public class GestorCSV {
 
     // Obtiene la ruta del archivo CSV para un curso dado.
     public String obtenerRutaArchivoCSV(String nombreCurso) {
-        // Selecciona la ruta del archivo basada en el nombre del curso.
         switch (nombreCurso) {
             case "Primero Básico":
                 return "src/CSV/files/primerobasico.csv";
@@ -81,7 +77,6 @@ public class GestorCSV {
 
     // Obtiene la ruta del archivo de asistencia CSV para un curso dado.
     public String obtenerRutaArchivoAsistencia(String nombreCurso) {
-        // Similar al método anterior pero para archivos de asistencia.
         switch (nombreCurso) {
             case "Primero Básico":
                 return "src/CSV/files/asistencias/asistenciaPrimero.csv";
