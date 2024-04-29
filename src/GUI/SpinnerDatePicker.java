@@ -11,9 +11,9 @@ public class SpinnerDatePicker {
 
     // Constructor que configura el marco y sus componentes.
     public SpinnerDatePicker() {
-        frame = new JFrame("Choose Date"); // Título del marco.
-        frame.setSize(200, 200); // Tamaño del marco.
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Comportamiento al cerrar.
+        frame = new JFrame("Choose Date"); 
+        frame.setSize(200, 200); 
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
 
         // Configuración inicial de fecha para el spinner.
         Date initialDate = new Date();
@@ -31,11 +31,11 @@ public class SpinnerDatePicker {
         spinner.setEditor(new JSpinner.DateEditor(spinner, "dd/MM/yyyy")); // Formato de fecha.
 
         JButton button = new JButton("Elegir día");
-        button.addActionListener(e -> JOptionPane.showMessageDialog(frame, spinner.getValue().toString())); // Muestra la fecha seleccionada.
+        button.addActionListener(e -> JOptionPane.showMessageDialog(frame, spinner.getValue().toString())); 
 
-        frame.setLayout(new FlowLayout()); // Usa FlowLayout para la disposición de componentes.
-        frame.add(button); // Añade el botón al marco.
-        frame.setVisible(true); // Hace visible el marco.
+        frame.setLayout(new FlowLayout()); 
+        frame.add(button); 
+        frame.setVisible(true); 
     }
 }
 
