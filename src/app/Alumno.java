@@ -2,6 +2,7 @@ package app;
 
 // Clase Alumno representa a un estudiante con su RUT, nombre y apellido.
 public class Alumno {
+
     // Atributos privados para el RUT, nombre y apellido del alumno.
     private String rut;
     private String nombre;
@@ -23,7 +24,7 @@ public class Alumno {
     public String getNombre() {
         return nombre;
     }
-    
+
     // Getter para obtener el apellido del alumno.
     public String getApellido() {
         return apellido;

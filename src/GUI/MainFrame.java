@@ -36,6 +36,11 @@ public class MainFrame extends JFrame {
         JButton openCursoOptions = new JButton("Open Curso Options");  // Botón para abrir opciones del curso seleccionado.
         openCursoOptions.addActionListener(e -> openCursoOptions());  // Listener para manejar el evento del botón.
         panel.add(openCursoOptions);  // Añade el botón al panel.
+        
+        JButton btnMostrarCursos = new JButton("Mostrar cursos con asistencia mayor a 20");  // Botón para abrir opciones del curso seleccionado.
+        btnMostrarCursos.addActionListener(e -> mostrar());  // Listener para manejar el evento del botón.
+        panel.add(btnMostrarCursos);  // Añade el botón al panel.
+        
     }
 
     // Método para cargar los nombres de los cursos desde el gestor CSV y añadirlos al ComboBox.
@@ -75,5 +80,19 @@ public class MainFrame extends JFrame {
         
         // Crea y retorna una nueva instancia de Curso con los datos obtenidos.
         return new Curso(courseName, alumnos, totalAlumnos, asistenciasPorFecha);
+    }
+    
+    private void mostrar() {
+  
+        List<String> cursos = gestor.asistenciaMayor();
+        JList<String> list = new JList<>(cursos.toArray(new String[0]));
+        JScrollPane scrollPane = new JScrollPane(list);
+        JFrame frame = new JFrame("Cursos con asistencia mayor a 20%");
+        frame.add(scrollPane);
+        frame.setSize(300, 200);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        
     }
 }

@@ -34,13 +34,13 @@ public class GestorCSV {
         // Verifica si la ruta del archivo es válida.
         if (rutaArchivo == null || rutaArchivo.isEmpty()) {
             System.out.println("Ruta esta vacia");
-            return alumnos;  
+            return alumnos;
         }
         File file = new File(rutaArchivo);
         // Verifica si el archivo existe.
         if (!file.exists()) {
             System.out.println("Archivo no existe: " + rutaArchivo);
-            return alumnos;  
+            return alumnos;
         }
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -78,6 +78,7 @@ public class GestorCSV {
                 return null;
         }
     }
+
     // Obtiene la ruta del archivo de asistencia CSV para un curso dado.
     public String obtenerRutaArchivoAsistencia(String nombreCurso) {
         // Similar al método anterior pero para archivos de asistencia.
@@ -94,6 +95,7 @@ public class GestorCSV {
                 return null;
         }
     }
+
     // Actualiza el archivo CSV del curso con la lista actual de alumnos.
     public void actualizarCSV(Curso clase) {
         String rutaArchivo = obtenerRutaArchivoCSV(clase.getNombre());
@@ -115,11 +117,10 @@ public class GestorCSV {
                 bw.write(linea);
                 bw.newLine();
             }
-            
-        } catch (IOException e) {
-            
-        // mensaje de error 
 
+        } catch (IOException e) {
+
+            // mensaje de error 
         }
     }
 
@@ -167,13 +168,13 @@ public class GestorCSV {
                 bw.write(lineaActualizada);
                 bw.newLine();
             }
-            
-       
+
         } catch (IOException e) {
             // mensaje de error 
 
         }
     }
+
     // Calcula el promedio de asistencia histórica para un curso basado en su archivo CSV.
     public double asistenciaHistorica(String nombreCurso) {
 
@@ -199,17 +200,16 @@ public class GestorCSV {
             if (contador > 0) {
                 double promedio = (double) suma / contador;
                 return promedio;
-            } else {
-                System.out.println("No se encontraron valores para calcular el promedio.");
             }
 
         } catch (IOException e) {
             System.err.println("Ocurrió un error al leer el archivo: " + e.getMessage());
         }
-        
+
         return -1;
 
     }
+
     // Obtiene una lista de nombres de cursos desde un archivo CSV.
     public List<String> obtenerNombresCursos() {
         List<String> aux = new ArrayList<>();
@@ -228,5 +228,24 @@ public class GestorCSV {
         }
         return aux;
 
+    }
+
+    public List asistenciaMayor() {
+
+        List<String> nombreCursos = obtenerNombresCursos();
+        List<String> cursosFiltrados = new ArrayList();
+
+        if (nombreCursos != null) {
+            for (int i = 0; i < nombreCursos.size(); i++) {
+                double auxAsistencia = asistenciaHistorica(nombreCursos.get(i));
+                System.out.print(auxAsistencia);
+                if (auxAsistencia < 20) {
+                    continue;
+                }
+                cursosFiltrados.add(nombreCursos.get(i));
+            }
+
+        }
+        return cursosFiltrados;
     }
 }
