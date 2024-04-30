@@ -1,6 +1,14 @@
 import GUI.*;
 import javax.swing.SwingUtilities;
 
+/** 
+@author
+* Sebastian Cruz
+* Joaquín Fuenzalida
+* Maximiliano Bustamante
+
+**/
+
 public class PROYECTOSIA1 {
 
     public static void main(String[] args) {
