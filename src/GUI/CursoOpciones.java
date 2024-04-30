@@ -15,16 +15,16 @@ import java.util.List;
 // Clase CursoOpciones que extiende de JDialog para manejar opciones relacionadas con un curso específico.
 public class CursoOpciones extends JDialog {
 
-    private final Curso curso;  
-    private final GestorCSV gestor = new GestorCSV(); 
+    private final Curso curso;
+    private final GestorCSV gestor = new GestorCSV();
 
     // Constructor de la clase que configura el diálogo.
     public CursoOpciones(JFrame parent, String title, Curso curso) {
-        super(parent, title, true); 
-        this.curso = curso; 
-        setSize(300, 200); 
-        setLocationRelativeTo(parent); 
-        setupUI(curso); 
+        super(parent, title, true);
+        this.curso = curso;
+        setSize(300, 200);
+        setLocationRelativeTo(parent);
+        setupUI(curso);
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -35,14 +35,14 @@ public class CursoOpciones extends JDialog {
     }
 
     @Override
-    public void dispose() {    
-        cerrar();  
-        super.dispose();  
+    public void dispose() {
+        cerrar();
+        super.dispose();
     }
 
     // Método para configurar la interfaz de usuario.
     private void setupUI(Curso curso) {
-        setLayout(new GridLayout(3, 1)); 
+        setLayout(new GridLayout(3, 1));
 
         // Botón para ver los alumnos del curso.
         JButton btnVerAlumnos = new JButton("Ver Alumnos");
@@ -215,7 +215,19 @@ public class CursoOpciones extends JDialog {
 
     }
 
-    private void eliminarAlumno() { // Implementación para eliminar un alumno.
+    private void eliminarAlumno() {
+        String[] options = {"Por RUT", "Por Nombre"};
+        int response = JOptionPane.showOptionDialog(this, "Eliminar estudiante por:", "Eliminar Estudiante",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+
+        if (response == 0) {
+            eliminarAlumnoRut();
+        } else if (response == 1) {
+            eliminarAlumnoNombre();
+        }
+    }
+
+    private void eliminarAlumnoRut() { // Implementación para eliminar un alumno.
         List<Alumno> auxAlumnos;
 
         auxAlumnos = curso.getAlumnos();
@@ -224,7 +236,7 @@ public class CursoOpciones extends JDialog {
         panel.add(new JLabel("RUT:"));
         panel.add(rutField);
 
-        int result = JOptionPane.showConfirmDialog(this, panel, "Ingrese los datos del alumno", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        int result = JOptionPane.showConfirmDialog(this, panel, "Ingrese el rut del alumno", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             String rut = rutField.getText();
             if (!auxAlumnos.stream().anyMatch(alumno -> alumno.getRut().equalsIgnoreCase(rut))) {
@@ -234,13 +246,48 @@ public class CursoOpciones extends JDialog {
             }
 
             curso.getAlumnos().removeIf(alumno -> alumno.getRut().equalsIgnoreCase(rut));
-        }
+            JOptionPane.showMessageDialog(this, "Alumno eliminado!", "Confirmacion", JOptionPane.INFORMATION_MESSAGE);
 
-        curso.setAlumnos(auxAlumnos);
+        }
 
     }
 
-    private void cerrar() { // Implementación para cerrar el diálogo y guardar cambios si es necesario.
+    private void eliminarAlumnoNombre() {
+        List<Alumno> auxAlumnos;
+
+        auxAlumnos = curso.getAlumnos();
+        JTextField nombreField = new JTextField(10);
+        JTextField apellidoField = new JTextField(10);
+
+        JPanel panel = new JPanel(new GridLayout(0, 1));
+        panel.add(new JLabel("Nombre:"));
+        panel.add(nombreField);
+        panel.add(new JLabel("Apellido:"));
+        panel.add(apellidoField);
+
+        int result = JOptionPane.showConfirmDialog(this, panel, "Ingrese el nombre del alumno", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (result == JOptionPane.OK_OPTION) {
+            String nombre = nombreField.getText();
+            String apellido = apellidoField.getText();
+            boolean exists = auxAlumnos.stream().anyMatch(alumno -> alumno.getNombre().equalsIgnoreCase(nombre) && alumno.getApellido().equalsIgnoreCase(apellido));
+            if (!exists) {
+                JOptionPane.showMessageDialog(this, "Alumno con nombre: " + nombre + " y apellido" + apellido + " no existe!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            boolean removed = curso.getAlumnos().removeIf(alumno -> alumno.getNombre().equalsIgnoreCase(nombre) && alumno.getApellido().equalsIgnoreCase(apellido));
+
+            if (removed) {
+                JOptionPane.showMessageDialog(this, "Alumno eliminado!", "Confirmacion", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al intentar eliminar al alumno.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+    }
+
+    private void cerrar() {
         gestor.actualizarAsistenciasCSV(curso);
         gestor.actualizarCSV(curso);
         gestor.actualizarCSV(curso);
