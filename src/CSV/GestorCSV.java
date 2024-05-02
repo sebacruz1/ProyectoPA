@@ -1,5 +1,9 @@
 package CSV;
 
+
+
+import Excepciones.ValorInvalidoException;
+import Excepciones.ConexionFallidaException;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,6 +37,7 @@ public class GestorCSV {
         List<Alumno> alumnos = new ArrayList<>();
         if (rutaArchivo == null || rutaArchivo.isEmpty()) {
             System.out.println("Ruta esta vacia");
+            
             return alumnos;
         }
         File file = new File(rutaArchivo);
@@ -92,12 +97,11 @@ public class GestorCSV {
     }
 
     // Actualiza el archivo CSV del curso con la lista actual de alumnos.
-    public void actualizarCSV(Curso clase) {
+    public void actualizarCSV(Curso clase) throws ConexionFallidaException {
         String rutaArchivo = obtenerRutaArchivoCSV(clase.getNombre());
 
         if (rutaArchivo == null) {
-            System.err.println("No se pudo encontrar la ruta del archivo para el curso: " + clase.getNombre());
-            return;
+            throw new ConexionFallidaException("No se pudo encontrar la ruta del archivo para el curso: " + clase.getNombre());
         }
 
         List<String> lineasNuevas = new ArrayList<>();
@@ -171,7 +175,7 @@ public class GestorCSV {
     }
 
     // Calcula el promedio de asistencia histórica para un curso basado en su archivo CSV.
-    public double asistenciaHistorica(String nombreCurso) {
+    public double asistenciaHistorica(String nombreCurso) throws ValorInvalidoException {
 
         String rutaArchivo = obtenerRutaArchivoAsistencia(nombreCurso);
         try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
@@ -187,7 +191,9 @@ public class GestorCSV {
                         suma += valor;
                         contador++;
                     } catch (NumberFormatException e) {
-                        System.err.println("No se pudo convertir el valor a entero: " + valores[1]);
+                        
+                        throw new ValorInvalidoException("No se pudo convertir el valor a entero: " + valores[1]);
+                       
                     }
                 }
             }
@@ -225,7 +231,7 @@ public class GestorCSV {
 
     }
 
-    public List asistenciaMayor() {
+    public List asistenciaMayor() throws ValorInvalidoException {
 
         List<String> nombreCursos = obtenerNombresCursos();
         List<String> cursosFiltrados = new ArrayList();
