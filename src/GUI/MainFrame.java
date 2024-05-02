@@ -4,10 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 import app.*;
 import CSV.GestorCSV;
+import Excepciones.ValorInvalidoException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 // Clase MainFrame que extiende de JFrame, actúa como la ventana principal de la aplicación.
 public class MainFrame extends JFrame {
@@ -40,7 +43,13 @@ public class MainFrame extends JFrame {
 
         
         JButton btnMostrarCursos = new JButton("Mostrar cursos con asistencia mayor a 20");  
-        btnMostrarCursos.addActionListener(e -> mostrar()); 
+        btnMostrarCursos.addActionListener(e -> {
+            try {
+                mostrar();
+            } catch (ValorInvalidoException ex) {
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }); 
         panel.add(btnMostrarCursos); 
         
         
@@ -89,7 +98,7 @@ public class MainFrame extends JFrame {
         return new Curso(courseName, alumnos, totalAlumnos, asistenciasPorFecha);
     }
     
-    private void mostrar() {
+    private void mostrar() throws ValorInvalidoException {
   
         List<String> cursos = gestor.asistenciaMayor();
         JList<String> list = new JList<>(cursos.toArray(new String[0]));

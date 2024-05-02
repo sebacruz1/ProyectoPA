@@ -1,7 +1,5 @@
 package CSV;
 
-
-
 import Excepciones.ValorInvalidoException;
 import Excepciones.ConexionFallidaException;
 import java.io.*;
@@ -37,7 +35,7 @@ public class GestorCSV {
         List<Alumno> alumnos = new ArrayList<>();
         if (rutaArchivo == null || rutaArchivo.isEmpty()) {
             System.out.println("Ruta esta vacia");
-            
+
             return alumnos;
         }
         File file = new File(rutaArchivo);
@@ -67,13 +65,13 @@ public class GestorCSV {
     // Obtiene la ruta del archivo CSV para un curso dado.
     public String obtenerRutaArchivoCSV(String nombreCurso) {
         switch (nombreCurso) {
-            case "Primero Básico":
+            case "Primero Basico":
                 return "src/CSV/files/primerobasico.csv";
-            case "Segundo Básico":
+            case "Segundo Basico":
                 return "src/CSV/files/segundobasico.csv";
-            case "Tercero Básico":
+            case "Tercero Basico":
                 return "src/CSV/files/tercerobasico.csv";
-            case "Cuarto Básico":
+            case "Cuarto Basico":
                 return "src/CSV/files/cuartobasico.csv";
             default:
                 return null;
@@ -83,13 +81,13 @@ public class GestorCSV {
     // Obtiene la ruta del archivo de asistencia CSV para un curso dado.
     public String obtenerRutaArchivoAsistencia(String nombreCurso) {
         switch (nombreCurso) {
-            case "Primero Básico":
+            case "Primero Basico":
                 return "src/CSV/files/asistencias/asistenciaPrimero.csv";
-            case "Segundo Básico":
+            case "Segundo Basico":
                 return "src/CSV/files/asistencias/asistenciaSegundo.csv";
-            case "Tercero Básico":
+            case "Tercero Basico":
                 return "src/CSV/files/asistencias/asistenciaTercero.csv";
-            case "Cuarto Básico":
+            case "Cuarto Basico":
                 return "src/CSV/files/asistencias/asistenciaCuarto.csv";
             default:
                 return null;
@@ -168,7 +166,6 @@ public class GestorCSV {
         }
     }
 
-
     // Calcula el promedio de asistencia histórica para un curso basado en su archivo CSV.
     public double asistenciaHistorica(String nombreCurso) throws ValorInvalidoException {
 
@@ -186,9 +183,9 @@ public class GestorCSV {
                         suma += valor;
                         contador++;
                     } catch (NumberFormatException e) {
-                        
+
                         throw new ValorInvalidoException("No se pudo convertir el valor a entero: " + valores[1]);
-                       
+
                     }
                 }
             }
@@ -234,7 +231,7 @@ public class GestorCSV {
         if (nombreCursos != null) {
             for (int i = 0; i < nombreCursos.size(); i++) {
                 double auxAsistencia = asistenciaHistorica(nombreCursos.get(i));
-               
+
                 if (auxAsistencia < 20) {
                     continue;
                 }

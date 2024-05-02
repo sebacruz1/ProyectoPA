@@ -2,6 +2,8 @@ package GUI;
 
 import app.*;
 import CSV.*;
+import Excepciones.ConexionFallidaException;
+import Excepciones.ValorInvalidoException;
 import javax.swing.*;
 import java.awt.*;
 import app.Curso;
@@ -11,6 +13,8 @@ import java.awt.event.WindowEvent;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 // Clase CursoOpciones que extiende de JDialog para manejar opciones relacionadas con un curso específico.
 public class CursoOpciones extends JDialog {
@@ -36,7 +40,11 @@ public class CursoOpciones extends JDialog {
 
     @Override
     public void dispose() {
-        cerrar();
+        try {
+            cerrar();
+        } catch (ConexionFallidaException ex) {
+            Logger.getLogger(CursoOpciones.class.getName()).log(Level.SEVERE, null, ex);
+        }
         super.dispose();
     }
 
@@ -56,7 +64,13 @@ public class CursoOpciones extends JDialog {
 
         // Botón para ver el promedio de asistencia de los alumnos.
         JButton btnVerPromedioAsistencia = new JButton("Ver Promedio de Asistencia");
-        btnVerPromedioAsistencia.addActionListener(e -> verPromedioAsistencia());
+        btnVerPromedioAsistencia.addActionListener(e -> {
+            try {
+                verPromedioAsistencia();
+            } catch (ValorInvalidoException ex) {
+                Logger.getLogger(CursoOpciones.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
         add(btnVerPromedioAsistencia);
 
         // Botón para agregar un nuevo alumno al curso.
@@ -72,7 +86,13 @@ public class CursoOpciones extends JDialog {
         // Botón para cerrar el diálogo.
         JButton btnCerrar = new JButton("Cerrar");
         add(btnCerrar);
-        btnCerrar.addActionListener(e -> cerrar());
+        btnCerrar.addActionListener(e -> {
+            try {
+                cerrar();
+            } catch (ConexionFallidaException ex) {
+                Logger.getLogger(CursoOpciones.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
     }
 // Métodos privados de la clase para manejar las acciones de los botones.
 
@@ -151,7 +171,7 @@ public class CursoOpciones extends JDialog {
         curso.registrarAsistencia(fechaContainer[0], presentes);
     }
 
-    private void verPromedioAsistencia() {  // Implementación para calcular y mostrar el promedio de asistencia.
+    private void verPromedioAsistencia() throws ValorInvalidoException {  // Implementación para calcular y mostrar el promedio de asistencia.
         double promedio = gestor.asistenciaHistorica(curso.getNombre());
 
         if (promedio == -1) {
@@ -287,7 +307,7 @@ public class CursoOpciones extends JDialog {
 
     }
 
-    private void cerrar() {
+    private void cerrar() throws ConexionFallidaException {
         gestor.actualizarAsistenciasCSV(curso);
         gestor.actualizarCSV(curso);
         gestor.actualizarCSV(curso);
