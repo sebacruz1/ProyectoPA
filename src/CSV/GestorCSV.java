@@ -124,24 +124,22 @@ public class GestorCSV {
     }
 
     // Actualiza el archivo CSV de asistencia para un curso con los datos actuales. 
-    public void actualizarAsistenciasCSV(Curso curso) {
+    public void actualizarAsistenciasCSV(Curso curso) throws ConexionFallidaException {
         String rutaArchivoAsistencia = obtenerRutaArchivoAsistencia(curso.getNombre());
-
+    
         if (rutaArchivoAsistencia == null) {
-            // mensaje de error 
-
-            return;
+            throw new ConexionFallidaException("No se encontró la ruta del archivo de asistencia para el curso: " + curso.getNombre());
         }
-
+    
         Map<String, String> asistenciasActualizadas = new HashMap<>();
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy", Locale.forLanguageTag("es"));
-
+    
         for (Map.Entry<Date, RegistroAsistencia> entry : curso.getAsistenciasPorFecha().entrySet()) {
             String fecha = formatter.format(entry.getKey());
             String asistencia = String.valueOf(entry.getValue().getAlumnosPresentes());
             asistenciasActualizadas.put(fecha, fecha + ";" + asistencia);
         }
-
+    
         List<String> lineasActualizadas = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivoAsistencia))) {
             String linea;
@@ -155,10 +153,21 @@ public class GestorCSV {
                 }
             }
         } catch (IOException e) {
-            // mensaje de error 
-
-            return;
+            throw new ConexionFallidaException("Error al leer el archivo de asistencia: " + e.getMessage());
         }
+    
+        lineasActualizadas.addAll(asistenciasActualizadas.values());
+    
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(rutaArchivoAsistencia, false))) {
+            for (String lineaActualizada : lineasActualizadas) {
+                bw.write(lineaActualizada);
+                bw.newLine();
+            }
+        } catch (IOException e) {
+            throw new ConexionFallidaException("Error al escribir en el archivo de asistencia: " + e.getMessage());
+        }
+    }
+
 
         lineasActualizadas.addAll(asistenciasActualizadas.values());
 
